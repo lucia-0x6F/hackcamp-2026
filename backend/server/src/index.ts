@@ -128,12 +128,20 @@ app.get('/api/recommendations', requireConfiguredAuth, async (req, res, next) =>
 
 
 const errors: ErrorRequestHandler = (error, _req, res, _next) => {
+  console.error('Request failed:', error);
   if (error instanceof z.ZodError) {
     res.status(400).json({ error: 'Invalid request', details: error.issues });
     return;
   }
   if (error instanceof AppError) {
     res.status(error.status).json({ error: error.message });
+    return;
+  }
+  // A user can change Auth0 accounts while keeping the same school email.
+  // SQLite rejects that duplicate email, so return a useful client error
+  // instead of hiding it behind a generic 500 response.
+  if (error instanceof Error && error.message.includes('UNIQUE constraint failed: users.email')) {
+    res.status(409).json({ error: 'A profile already exists for this email address' });
     return;
   }
   res.status(500).json({ error: 'Unexpected server error' });
