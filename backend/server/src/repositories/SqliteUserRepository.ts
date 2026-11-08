@@ -46,7 +46,7 @@ export class SqliteUserRepository implements UserRepository {
     this.database
       .prepare(
         `INSERT INTO users (id, email, name, school_id, school_year, major, hobbies, interested_types)
-         VALUES (@id, @email, @schoolId, @schoolYear, @major, @hobbies, @interestedTypes)
+         VALUES (@id, @email, @name, @schoolId, @schoolYear, @major, @hobbies, @interestedTypes)
          ON CONFLICT(id) DO UPDATE SET
            email=@email,
            name=@name,
