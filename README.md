@@ -1,85 +1,39 @@
-# hackcamp-2026
+# on campus
+## *A way to connect with people on campus*
 
-## API documentation
 
-See [backend/server/API.md](backend/server/API.md) for endpoint addresses, request and response formats, authentication requirements, and error codes.
 
-## Frontend login
 
-The frontend uses Auth0 for login. In `frontend/client`, create a `.env` file:
+### Inspiration
 
-```env
-VITE_AUTH0_DOMAIN=your-tenant.us.auth0.com
-VITE_AUTH0_CLIENT_ID=your_auth0_client_id
-VITE_AUTH0_AUDIENCE=https://your-api-identifier
-VITE_API_URL=http://localhost:3000
-```
 
-Configure the Auth0 application callback URLs for local development:
+The inspiration behind this project came from our university experience and many others. We know as university students, it can be hard to make arrangements with friends and oftentimes, students simply want someone to accompany them. On a Reddit post, we saw that students (specifically UBC students) have been discussing this problem since the pandemic. A student described their experience of taking a break from a long day of studying at IKB and wondering if someone nearby wanted to accompany them for dinner. In 2023, the post was still gaining traction. A student mentioned that they were looking to meet new people after their friends had all graduated. Both students were looking for an app that could help them facilitate these types of social interactions.
 
-```text
-Allowed Callback URLs: http://localhost:5173
-Allowed Logout URLs: http://localhost:5173
-Allowed Web Origins: http://localhost:5173
-```
 
-The `VITE_AUTH0_AUDIENCE` value must match the backend `AUTH0_AUDIENCE`. The backend also needs `AUTH0_ISSUER_BASE_URL` and `AUTH0_AUDIENCE` in `backend/server/.env`.
+We found this perspective very relatable, and are sure many students would love to meet new people and connections but are unsure how to initiate these conversations. This was the inspiration behind _on campus_. What is more unique about _on campus_ compared to other social networking and social media apps is that there is no follower count or friend list. This allows for more casual, day to day interactions and prevents people from overthinking the meet up as there is no profile or following count. One can simply sign up for an activity that sounds fun and meet people along the way.
 
-Start the backend and frontend in separate terminals:
 
-```sh
-cd backend/server && npm run dev
-cd frontend/client && npm run dev
-```
+### What it does
+_on campus_ connects students through shared activities. Students can sign up using their school email, create activity posts for others to join, and request to join activities posted by other students. Based on their interests, students will also receive personalized activity recommendations and can browse through other activities happening on campus.
 
-If the frontend Auth0 variables are missing, the existing local/sample UI remains available. Never put an Auth0 client secret or a Resend API key in frontend environment variables.
 
-## Email notifications
+### How we built it
+Frontend: React, TypeScript, Tailwind CSS, HTML, CSS
+Backend: Express.js, JavaScript, REST APIs
+Authentication & Email: Auth0 for email verification and Resend for email notifications
 
-The backend uses Resend for production notification emails. From the repository root, create a local environment file:
 
-```sh
-cp backend/server/.env.example backend/server/.env
-```
+### Challenges we ran into
+We found the design aspect challenging as none of us have had much experience in design. We wanted a simple and intuitive display so students could quickly post activities on the go. It was challenging to translate our ideas into Figma. However, we watched many tutorials and online resources that allowed us to turn our ideas into prototypes.
 
-Create a Resend account, generate an API key in the Resend dashboard, and set the values in `backend/server/.env`:
 
-```env
-RESEND_API_KEY=
-EMAIL_FROM=
-```
+### Accomplishments that we're proud of
+One of our biggest accomplishments is being able to bring our idea to life as a team of entirely beginner hackers. We often had to learn new concepts on the spot and debug unexpected problems, thus we’re glad that we were able to work together and overcome those challenges.
 
-`RESEND_API_KEY` is a private credential and must never be committed or exposed to frontend code. The `EMAIL_FROM` address must use a domain verified in Resend when sending from a custom domain.
 
-If `RESEND_API_KEY` or `EMAIL_FROM` is missing, the backend uses `ConsoleEmailService`. In that mode, notification emails are printed to the server log and no real email is sent. This is useful for local development.
+### What we learned
+Throughout this hackathon, we learned a lot about full-stack development and how different technologies work together. This experience also taught us that even with limited experience, we can still build something meaningful and impactful for our student community.
 
-The local `backend/server/.env` file is ignored by Git. Commit only `backend/server/.env.example`, which contains placeholders and no credentials.
 
-## Backend authentication
-
-The API uses Auth0-issued RS256 access tokens. Auth0 handles account creation, login, and email verification; the backend validates the bearer token and only allows verified addresses from:
-
-- `student.ubc.ca`
-- `sfu.ca`
-- `uvic.ca`
-
-Configure these backend environment variables before starting the server:
-
-```sh
-AUTH0_ISSUER_BASE_URL=https://YOUR_DOMAIN/
-AUTH0_AUDIENCE=https://YOUR_API_IDENTIFIER
-# Optional; defaults to https://oncampus.app
-AUTH0_CLAIMS_NAMESPACE=https://oncampus.app
-```
-
-In the Auth0 API settings, use RS256. Add a Post-Login Action to copy `email` and `email_verified` into the access token, because Auth0 does not normally include those claims in API access tokens:
-
-```js
-exports.onExecutePostLogin = async (event, api) => {
-  const ns = 'https://oncampus.app';
-  if (event.user.email) api.accessToken.setCustomClaim(`${ns}/email`, event.user.email);
-  api.accessToken.setCustomClaim(`${ns}/email_verified`, event.user.email_verified === true);
-};
-```
-
-The frontend must request an access token for `AUTH0_AUDIENCE` and send it as `Authorization: Bearer <token>` to `/api/profile`. No Auth0 client secret belongs in the frontend or this backend.
+### What's next for on campus
+We hope to develop _on campus_ into a mobile app for greater convenience, allowing students to find and join activities on the go. We plan to improve security and privacy by adding stronger protection for user information, and we also want to introduce a group messaging feature so students can communication and coordinate plans more easily. Additionally, we aim to integrate calendars, so students can upload their schedules and receive personalized activity recommendations based on their availability.
