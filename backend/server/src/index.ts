@@ -129,6 +129,23 @@ app.get('/api/recommendations', requireConfiguredAuth, async (req, res, next) =>
 
 const errors: ErrorRequestHandler = (error, _req, res, _next) => {
   console.error('Request failed:', error);
+  // express-oauth2-jwt-bearer reports missing/invalid bearer tokens through
+  // next(error). Preserve its HTTP status instead of turning auth failures
+  // into an unrelated 500 response.
+  const status =
+    typeof error?.status === 'number'
+      ? error.status
+      : typeof error?.statusCode === 'number'
+        ? error.statusCode
+        : undefined;
+  if (status === 401) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
+  }
+  if (status === 403) {
+    res.status(403).json({ error: 'Forbidden' });
+    return;
+  }
   if (error instanceof z.ZodError) {
     res.status(400).json({ error: 'Invalid request', details: error.issues });
     return;

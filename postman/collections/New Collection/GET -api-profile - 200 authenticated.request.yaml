@@ -1,0 +1,37 @@
+$kind: http-request
+name: GET /api/profile - 200 authenticated
+description: ""
+url: http://localhost:3000/api/profile
+method: GET
+auth:
+  type: oauth2
+  credentials:
+    addTokenTo: header
+    redirect_uri: https://oauth.pstmn.io/v1/browser-callback
+    authUrl: https://dev-e1lw72owcfk34cgi.us.auth0.com/authorize
+    clientId: UQJvcorSfyLsLRvCDuuszlxFLH9W82A8
+    scope: openid profile email
+    authRequestParams:
+      - key: audience
+        value: https://oncampus-api
+        enabled: true
+        send_as: request_url
+    grant_type: authorization_code_with_pkce
+    accessTokenUrl: https://dev-e1lw72owcfk34cgi.us.auth0.com/oauth/token
+    refreshRequestParams: []
+    refreshTokenUrl: https://dev-e1lw72owcfk34cgi.us.auth0.com/oauth/token
+    tokenRequestParams: []
+    clientSecret: m87YMzG4kyG2KXaQLTRtepqNy6Wwd-2YpZexOn_Xxxr-E37X2nKuRSwuI3KtKJbm
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Response status code is 200", function () {
+          pm.response.to.have.status(200);
+      })
+
+      pm.test("profile is the correct type", function () {
+         const data = pm.response.json().data;
+         pm.expect(data[0].id).to.be.a('string');
+      })
+    language: text/javascript
+order: 1000
