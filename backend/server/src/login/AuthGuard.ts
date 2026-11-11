@@ -3,6 +3,8 @@ import { AuthUser } from './AuthUser.js';
 
 const NS = process.env.AUTH0_CLAIMS_NAMESPACE ?? 'https://oncampus.app';
 
+const isVerified = (value: unknown) => value === true || value === 'true';
+
 export class AuthGuard {
   static async requireAccountEmail(req: Request, res: Response, next: NextFunction): Promise<void> {
     const payload = req.auth?.payload;
@@ -14,7 +16,7 @@ export class AuthGuard {
     try {
       // Auth0 may include email directly or under the configured namespace.
       let email = (payload.email as string | undefined) ?? (payload[`${NS}/email`] as string | undefined);
-      let verified = payload.email_verified === true || payload[`${NS}/email_verified`] === true;
+      let verified = isVerified(payload.email_verified) || isVerified(payload[`${NS}/email_verified`]);
 
       // Auth0 access tokens commonly omit profile claims. /userinfo requires
       // the access token to have been issued with the `openid email` scopes.
@@ -28,7 +30,7 @@ export class AuthGuard {
           if (response.ok) {
             const profile = await response.json() as { email?: unknown; email_verified?: unknown };
             if (typeof profile.email === 'string') email = profile.email;
-            verified = profile.email_verified === true;
+            verified = isVerified(profile.email_verified);
           }
         }
       }

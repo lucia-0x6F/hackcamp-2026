@@ -13,7 +13,11 @@ createRoot(document.getElementById('root')!).render(
       <Auth0Provider
         domain={auth0Config.domain!}
         clientId={auth0Config.clientId!}
-        authorizationParams={{ redirect_uri: window.location.origin, audience: auth0Config.audience }}
+        authorizationParams={{
+          redirect_uri: window.location.origin,
+          audience: auth0Config.audience,
+          scope: 'openid profile email',
+        }}
         // Keeps students signed in across page reloads. Needs "Refresh Token
         // Rotation" turned on for this application in the Auth0 dashboard.
         useRefreshTokens
