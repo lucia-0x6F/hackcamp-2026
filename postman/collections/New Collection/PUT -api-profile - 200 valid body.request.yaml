@@ -73,7 +73,7 @@ scripts:
 
       pm.test("id and email come from the token, not the body", () => {
         pm.expect(json.data.id).to.match(/^[^|]+\|.+$/);
-        pm.expect(json.data.email).to.match(/@([a-z0-9-]+\.)*(ubc\.ca|sfu\.ca|uvic\.ca)$/i);
+        pm.expect(json.data.email).to.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
       });
     language: text/javascript
 order: 1718

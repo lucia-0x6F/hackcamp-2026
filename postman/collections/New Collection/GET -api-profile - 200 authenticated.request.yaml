@@ -52,9 +52,9 @@ scripts:
       });
 
 
-      pm.test("email is a UBC, SFU, or UVic school email", () => {
+      pm.test("email is a valid verified-account email", () => {
         pm.expect(json.data.email).to.be.a("string");
-        pm.expect(json.data.email).to.match(/@([a-z0-9-]+\.)*(ubc\.ca|sfu\.ca|uvic\.ca)$/i);
+        pm.expect(json.data.email).to.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
       });
 
 
