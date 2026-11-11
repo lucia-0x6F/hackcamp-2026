@@ -35,6 +35,32 @@ describe('ActivityValidator', () => {
 });
 
 describe('ActivityService permissions', () => {
+  it('creates an activity at the authenticated profile school', async () => {
+    const { activities, users, service } = setup();
+    vi.mocked(users.find).mockResolvedValue({ schoolId: 2 } as any);
+    vi.mocked(activities.create).mockImplementation(async (value) => value);
+
+    const created = await service.create(auth, input);
+
+    expect(created).toMatchObject({ creatorId: auth.id, schoolId: 2, name: input.name });
+  });
+
+  it('lists only activities at the authenticated profile school', async () => {
+    const { activities, users, service } = setup();
+    vi.mocked(users.find).mockResolvedValue({ schoolId: 3 } as any);
+    vi.mocked(activities.list).mockResolvedValue([]);
+
+    await service.list(auth, { type: 'study', location: 'Library' });
+
+    expect(activities.list).toHaveBeenCalledWith({ schoolId: 3, type: 'study', location: 'Library' });
+  });
+
+  it('returns an activity by id', async () => {
+    const { activities, service } = setup();
+    vi.mocked(activities.findById).mockResolvedValue(activity);
+    await expect(service.get(activity.id)).resolves.toEqual(activity);
+  });
+
   it('allows only the creator to update an activity', async () => {
     const { activities, service } = setup();
     vi.mocked(activities.findById).mockResolvedValue(activity);
@@ -47,6 +73,14 @@ describe('ActivityService permissions', () => {
     vi.mocked(activities.delete).mockResolvedValue(false);
     await expect(service.delete(otherAuth, activity.id)).rejects.toMatchObject({ status: 404 });
     expect(activities.delete).toHaveBeenCalledWith(activity.id, otherAuth.id);
+  });
+
+  it('updates an activity only after validating the input', async () => {
+    const { activities, service } = setup();
+    vi.mocked(activities.findById).mockResolvedValue(activity);
+    vi.mocked(activities.update).mockResolvedValue(activity);
+    await service.update(auth, activity.id, { ...input, name: ' Updated ' });
+    expect(activities.update).toHaveBeenCalledWith(activity.id, expect.objectContaining({ name: 'Updated' }));
   });
 
   it('rejects activity creation when the user has no profile', async () => {

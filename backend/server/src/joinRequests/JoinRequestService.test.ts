@@ -21,6 +21,24 @@ function setup() {
 }
 
 describe('JoinRequestService permissions and status rules', () => {
+  it('creates a pending request for a profiled non-creator and notifies the creator', async () => {
+    const { requests, activities, users, service } = setup();
+    vi.mocked(activities.findById).mockResolvedValue(activity);
+    vi.mocked(users.find).mockResolvedValue({ email: 'creator@example.com', name: 'Creator' } as any);
+    vi.mocked(requests.create).mockImplementation(async (value) => value);
+
+    const result = await service.create(applicant, activity.id);
+
+    expect(result).toMatchObject({ activityId: activity.id, userId: applicant.id, status: 'pending' });
+  });
+
+  it('rejects joining a missing or self-created activity', async () => {
+    const { activities, service } = setup();
+    vi.mocked(activities.findById).mockResolvedValueOnce(null).mockResolvedValueOnce(activity);
+    await expect(service.create(applicant, activity.id)).rejects.toMatchObject({ status: 404 });
+    await expect(service.create(creator, activity.id)).rejects.toMatchObject({ status: 400 });
+  });
+
   it('allows only the activity creator to review requests', async () => {
     const { requests, activities, service } = setup();
     const request: JoinRequestRecord = { id: 'request-1', activityId: activity.id, userId: applicant.id, status: 'pending', createdAt: '2030-01-01T00:00:00.000Z' };
@@ -45,5 +63,25 @@ describe('JoinRequestService permissions and status rules', () => {
     vi.mocked(requests.delete).mockResolvedValue(true);
     await expect(service.cancel(applicant, request.id)).resolves.toBeUndefined();
     expect(requests.delete).toHaveBeenCalledWith(request.id, applicant.id);
+  });
+
+  it('updates a pending request when the creator accepts it', async () => {
+    const { requests, activities, users, service } = setup();
+    const pending: JoinRequestRecord = { id: 'request-1', activityId: activity.id, userId: applicant.id, status: 'pending', createdAt: '2030-01-01T00:00:00.000Z' };
+    vi.mocked(requests.find).mockResolvedValue(pending);
+    vi.mocked(activities.findById).mockResolvedValue(activity);
+    vi.mocked(requests.updateStatus).mockResolvedValue({ ...pending, status: 'accepted' });
+    vi.mocked(users.find).mockResolvedValue({ email: 'applicant@example.com', name: 'Applicant' } as any);
+    await expect(service.updateStatus(creator, pending.id, 'accepted')).resolves.toMatchObject({ status: 'accepted' });
+  });
+
+  it('lists a creator activity requests and an applicant requests', async () => {
+    const { requests, activities, users, service } = setup();
+    vi.mocked(activities.findById).mockResolvedValue(activity);
+    vi.mocked(requests.listForActivity).mockResolvedValue([]);
+    vi.mocked(users.find).mockResolvedValue({ id: applicant.id } as any);
+    vi.mocked(requests.listForUser).mockResolvedValue([]);
+    await expect(service.list(creator, activity.id)).resolves.toEqual([]);
+    await expect(service.listForUser(applicant)).resolves.toEqual([]);
   });
 });
