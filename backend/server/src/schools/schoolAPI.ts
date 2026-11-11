@@ -5,10 +5,9 @@ import type { SchoolRepository } from '../repositories/SchoolRepository.js';
 export function schoolAPI(schools: SchoolRepository) {
   const router = Router();
 
-  router.get('/', (_req, res) => {
-    res.json({
-      data: schools.list().map(({ id, name }) => ({ id, name })),
-    });
+  router.get('/', async (_req, res, next) => {
+    try { res.json({ data: (await schools.list()).map(({ id, name }) => ({ id, name })) }); }
+    catch (error) { next(error); }
   });
 
   return router;

@@ -18,7 +18,7 @@ export class ProfileService {
   async save(auth: AuthUser, input: Profile): Promise<User> {
     const isNewUser = !(await this.users.exists(auth.id));
     let school;
-    try { school = this.schools.mustFind(input.schoolId); } catch { throw new AppError('School not found', 400); }
+    try { school = await this.schools.mustFind(input.schoolId); } catch { throw new AppError('School not found', 400); }
     const user = User.create(auth.id, input, auth.storageEmail());
     await this.users.save(user);
     // Only send email when Auth0 actually supplied a deliverable address.

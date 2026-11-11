@@ -5,6 +5,6 @@ export interface SchoolRecord {
 }
 
 export interface SchoolRepository {
-  mustFind(id: number): SchoolRecord;
-  list(): SchoolRecord[];
+  mustFind(id: number): Promise<SchoolRecord>;
+  list(): Promise<SchoolRecord[]>;
 }

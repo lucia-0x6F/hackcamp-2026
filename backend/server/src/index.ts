@@ -22,6 +22,11 @@ import { ConsoleEmailService } from './notifications/EmailService.js';
 import { NotificationService } from './notifications/NotificationService.js';
 import { ResendEmailService } from './notifications/ResendEmailService.js';
 import { schoolAPI } from './schools/schoolAPI.js';
+import { supabase, SupabaseActivityRepository, SupabaseJoinRequestRepository, SupabaseSchoolRepository, SupabaseUserRepository } from './repositories/SupabaseRepositories.js';
+import type { UserRepository } from './repositories/UserRepository.js';
+import type { SchoolRepository } from './repositories/SchoolRepository.js';
+import type { ActivityRepository } from './repositories/ActivityRepository.js';
+import type { JoinRequestRepository } from './repositories/JoinRequestRepository.js';
 
 const app = express();
 const frontendOrigins = process.env.FRONTEND_ORIGIN
@@ -29,9 +34,12 @@ const frontendOrigins = process.env.FRONTEND_ORIGIN
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-const users = new SqliteUserRepository(db);
-const schools = new SqliteSchoolRepository(db);
-const activities = new SqliteActivityRepository(db);
+const useSupabase = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+const client = useSupabase ? supabase() : null;
+const users: UserRepository = client ? new SupabaseUserRepository(client) : new SqliteUserRepository(db);
+const schools: SchoolRepository = client ? new SupabaseSchoolRepository(client) : new SqliteSchoolRepository(db);
+const activities: ActivityRepository = client ? new SupabaseActivityRepository(client) : new SqliteActivityRepository(db);
+const joinRequests: JoinRequestRepository = client ? new SupabaseJoinRequestRepository(client) : new SqliteJoinRequestRepository(db);
 const activityService = new ActivityService(activities, users);
 const emailService = process.env.RESEND_API_KEY && process.env.EMAIL_FROM
   ? new ResendEmailService(process.env.EMAIL_FROM)
@@ -39,7 +47,7 @@ const emailService = process.env.RESEND_API_KEY && process.env.EMAIL_FROM
 const notifications = new NotificationService(emailService);
 const service = new ProfileService(users, schools, notifications);
 const joinRequestService = new JoinRequestService(
-  new SqliteJoinRequestRepository(db),
+  joinRequests,
   activities,
   users,
   notifications,
@@ -116,7 +124,7 @@ app.put('/api/profile', requireConfiguredAuth, async (req, res, next) => {
 
 app.use('/api/activities', activityAPI(activityService, requireConfiguredAuth));
 app.use('/api/join-requests', joinRequestAPI(joinRequestService, requireConfiguredAuth));
-app.use('/api/schools', schoolAPI(new SqliteSchoolRepository(db)));
+app.use('/api/schools', schoolAPI(schools));
 
 app.get('/api/recommendations', requireConfiguredAuth, async (req, res, next) => {
   try {
