@@ -53,7 +53,7 @@ function validate(d: Draft): string | null {
 
 type Status = { kind: 'editing' } | { kind: 'saving' } | { kind: 'error'; message: string } | { kind: 'done' };
 
-export function CreateActivity({ onViewDiscover }: { onViewDiscover: () => void }) {
+export function CreateActivity({ onCreated, onViewDiscover }: { onCreated: () => void; onViewDiscover: () => void }) {
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [touched, setTouched] = useState(false);
   const [status, setStatus] = useState<Status>({ kind: 'editing' });
@@ -76,6 +76,7 @@ export function CreateActivity({ onViewDiscover }: { onViewDiscover: () => void 
         link: draft.link.trim() || null,
         ...times,
       });
+      onCreated();
       setStatus({ kind: 'done' });
     } catch (e) {
       setStatus({ kind: 'error', message: (e as Error).message });

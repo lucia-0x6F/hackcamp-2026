@@ -55,6 +55,7 @@ function MainApp({
   const [page, setPage] = useState<Page>('discover');
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [profileLoaded, setProfileLoaded] = useState(false);
+  const [dataRevision, setDataRevision] = useState(0);
 
   useEffect(() => {
     setTokenGetter(getAccessTokenSilently ? () => getAccessTokenSilently() : null);
@@ -78,20 +79,27 @@ function MainApp({
     scrollTop();
   };
 
+  const refreshActivityData = () => setDataRevision((revision) => revision + 1);
+
+  const saveProfile = (saved: ProfileData) => {
+    setProfile(saved);
+    refreshActivityData();
+  };
+
   return (
     <div className="shell">
       {usingSampleData && <p className="sample-banner">Sample data: nothing is saved to the server.</p>}
       <NavBar current={page} onNavigate={navigate} onLogOut={onLogOut} />
       <main>
-        {page === 'discover' && <Discover schoolId={profile?.schoolId ?? null} />}
-        {page === 'create' && <CreateActivity onViewDiscover={() => navigate('discover')} />}
-        {page === 'mine' && <MyActivities userId={userId} onDiscover={() => navigate('discover')} />}
+        {page === 'discover' && <Discover schoolId={profile?.schoolId ?? null} refreshKey={dataRevision} />}
+        {page === 'create' && <CreateActivity onCreated={refreshActivityData} onViewDiscover={() => navigate('discover')} />}
+        {page === 'mine' && <MyActivities userId={userId} refreshKey={dataRevision} onDiscover={() => navigate('discover')} />}
         {page === 'profile' &&
           (profileLoaded ? (
             <Profile
               key={profile ? 'saved' : 'new'}
               initial={profile ?? { ...emptyProfile, schoolId: defaultSchoolId }}
-              onSaved={setProfile}
+              onSaved={saveProfile}
             />
           ) : (
             <p className="status page">Loading profile…</p>
@@ -159,7 +167,6 @@ function LiveApp() {
       getAccessTokenSilently={() =>
         getAccessTokenSilently({
           authorizationParams: { audience: auth0Config.audience },
-          cacheMode: 'off',
         })
       }
     />

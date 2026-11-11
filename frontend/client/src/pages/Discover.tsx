@@ -20,7 +20,7 @@ const load = (filter: Filter) =>
     ? api.getRecommendations()
     : api.listActivities(filter === 'all' ? {} : { type: filter });
 
-export function Discover({ schoolId }: { schoolId: number | null }) {
+export function Discover({ schoolId, refreshKey }: { schoolId: number | null; refreshKey: number }) {
   const [filter, setFilter] = useState<Filter>('for-you');
   const [state, setState] = useState<State>({ status: 'loading' });
 
@@ -32,7 +32,7 @@ export function Discover({ schoolId }: { schoolId: number | null }) {
     return () => {
       cancelled = true;
     };
-  }, [filter]);
+  }, [filter, refreshKey]);
 
   const choose = (value: Filter) => {
     if (value === filter) return;

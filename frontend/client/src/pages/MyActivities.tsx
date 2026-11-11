@@ -37,7 +37,7 @@ async function load(userId: string): Promise<{ hosted: Hosted[]; joined: Joined[
   return { hosted, joined };
 }
 
-export function MyActivities({ userId, onDiscover }: { userId: string; onDiscover: () => void }) {
+export function MyActivities({ userId, refreshKey, onDiscover }: { userId: string; refreshKey: number; onDiscover: () => void }) {
   const [state, setState] = useState<State>({ status: 'loading' });
   const [busy, setBusy] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -47,7 +47,7 @@ export function MyActivities({ userId, onDiscover }: { userId: string; onDiscove
       load(userId)
         .then((data) => setState({ status: 'ready', ...data }))
         .catch((e: Error) => setState({ status: 'error', message: e.message })),
-    [userId],
+    [userId, refreshKey],
   );
 
   useEffect(() => {
