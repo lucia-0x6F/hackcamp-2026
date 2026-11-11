@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { api, setTokenGetter, usingSampleData, type Profile as ProfileData } from './api';
+import { api, auth0Config, setTokenGetter, usingSampleData, type Profile as ProfileData } from './api';
 import { NavBar, type Page } from './components/NavBar';
 import { SCHOOL_OPTIONS } from './format';
 import { CreateActivity } from './pages/CreateActivity';
@@ -170,7 +170,12 @@ function LiveApp() {
       userId={user.sub ?? ''}
       defaultSchoolId={schoolForEmail(user.email)}
       onLogOut={logOut}
-      getAccessTokenSilently={() => getAccessTokenSilently()}
+      getAccessTokenSilently={() =>
+        getAccessTokenSilently({
+          authorizationParams: { audience: auth0Config.audience },
+          cacheMode: 'off',
+        })
+      }
     />
   );
 }
