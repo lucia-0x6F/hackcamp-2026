@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { AuthGuard } from './AuthGuard.js';
 
 function request(payload: Record<string, unknown>) {
-  return { auth: { token: 'signed-access-token', payload } } as any;
+  return { auth: { token: JSON.stringify(payload), payload } } as any;
 }
 
 function response() {
