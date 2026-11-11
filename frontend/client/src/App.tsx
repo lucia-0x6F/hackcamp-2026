@@ -156,9 +156,11 @@ function LiveApp() {
     return (
       <PublicScreens
         onSignUp={(_schoolId, email) =>
-          loginWithRedirect({ authorizationParams: { screen_hint: 'signup', login_hint: email } })
+          loginWithRedirect({
+            authorizationParams: { screen_hint: 'signup', login_hint: email, scope: 'openid profile email' },
+          })
         }
-        onLogIn={(email) => loginWithRedirect({ authorizationParams: { login_hint: email } })}
+        onLogIn={(email) => loginWithRedirect({ authorizationParams: { login_hint: email, scope: 'openid profile email' } })}
       />
     );
 
@@ -169,7 +171,8 @@ function LiveApp() {
       onLogOut={logOut}
       getAccessTokenSilently={() =>
         getAccessTokenSilently({
-          authorizationParams: { audience: auth0Config.audience },
+          // The API needs the verified email from the token or /userinfo.
+          authorizationParams: { audience: auth0Config.audience, scope: 'openid profile email' },
         })
       }
     />
