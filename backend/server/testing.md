@@ -97,7 +97,7 @@ Important rules: users cannot join their own activity, and only the activity cre
 |---|---|
 | `Validator.ts` | Email format, trimming, lowercasing, and school-domain matching. |
 | `SchoolEmail.ts` | Correct school domains are accepted and other domains are rejected. |
-| `AuthUser.ts` | Verified UBC, SFU, or UVic emails can use the app; missing or unverified emails cannot. |
+| `AuthUser.ts` | Verified, well-formed account emails can use the app; missing or unverified emails cannot. |
 | `ProfileService.ts` | Creating/updating profiles, checking that the school exists, and matching email domain to school. |
 
 ### Recommendations

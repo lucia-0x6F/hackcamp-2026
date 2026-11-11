@@ -4,7 +4,7 @@ import { AuthLayout } from '../components/AuthLayout';
 const NOTES = [{ title: 'almost in!', when: 'Check your inbox', color: 'yellow', back: 'mint' }];
 
 /**
- * Shown after Auth0 sign-up until the student clicks the link in Auth0's
+ * Shown after Auth0 sign-up until the user clicks the link in Auth0's
  * verification email. The backend refuses unverified emails, so nothing in
  * the app works before this.
  */
@@ -41,7 +41,7 @@ export function VerifyEmail({
           One more <span className="marker">step.</span>
         </>
       }
-      blurb="We only let in real students, so we need to check your school email."
+      blurb="We use your verified email to keep your account secure."
       notes={NOTES}
       pose="wave"
       onBack={onLogOut}

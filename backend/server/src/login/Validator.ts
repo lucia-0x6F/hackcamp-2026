@@ -7,14 +7,4 @@ export class Validator {
     }
     return v;
   }
-
-  static schoolEmail(value: string, schoolDomain: string) {
-    const v = Validator.email(value);
-    const host = v.split('@')[1];
-    const domain = schoolDomain.trim().toLowerCase();
-    if (host !== domain) {
-      throw new Error(`Please use your @${domain} email`);
-    }
-    return v;
-  }
 }

@@ -14,7 +14,7 @@ We found this perspective very relatable, and are sure many students would love 
 
 
 ### What it does
-_on campus_ connects students through shared activities. Students can sign up using their school email, create activity posts for others to join, and request to join activities posted by other students. Based on their interests, students will also receive personalized activity recommendations and can browse through other activities happening on campus.
+_on campus_ connects students through shared activities. Students can sign up with a verified email, create activity posts for others to join, and request to join activities posted by other students. Based on their interests, students will also receive personalized activity recommendations and can browse through other activities happening on campus.
 
 
 ### How we built it
