@@ -1,7 +1,7 @@
 $kind: http-request
-name: http://localhost:3000/api/schools
+name: "{{BASE_URL}}/api/schools"
 description: ""
-url: http://localhost:3000/api/schools
+url: "{{BASE_URL}}/api/schools"
 method: GET
 scripts:
   - type: afterResponse

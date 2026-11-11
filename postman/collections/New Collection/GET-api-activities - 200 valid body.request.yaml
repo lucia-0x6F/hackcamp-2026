@@ -1,7 +1,7 @@
 $kind: http-request
 name: GET/api/activities - 200 valid body
 description: ""
-url: http://localhost:3000/api/activities?type=study&location=Library
+url: "{{BASE_URL}}/api/activities?type=study&location=Library"
 method: GET
 queryParams:
   type: study

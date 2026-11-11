@@ -1,7 +1,7 @@
 $kind: http-request
 name: PUT /api/profile - 200 valid body
 description: ""
-url: http://localhost:3000/api/profile
+url: "{{BASE_URL}}/api/profile"
 method: PUT
 body:
   type: json

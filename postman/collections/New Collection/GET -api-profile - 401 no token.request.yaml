@@ -1,7 +1,7 @@
 $kind: http-request
 name: GET /api/profile - 401 no token
 description: ""
-url: http://localhost:3000/api/profile
+url: "{{BASE_URL}}/api/profile"
 method: GET
 auth:
   type: oauth2
