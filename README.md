@@ -23,10 +23,6 @@ Backend: Express.js, JavaScript, REST APIs
 Authentication & Email: Auth0 for email verification and Resend for email notifications
 
 
-### Challenges we ran into
-We found the design aspect challenging as none of us have had much experience in design. We wanted a simple and intuitive display so students could quickly post activities on the go. It was challenging to translate our ideas into Figma. However, we watched many tutorials and online resources that allowed us to turn our ideas into prototypes.
-
-
 ### Accomplishments that we're proud of
 One of our biggest accomplishments is being able to bring our idea to life as a team of entirely beginner hackers. We often had to learn new concepts on the spot and debug unexpected problems, thus we’re glad that we were able to work together and overcome those challenges.
 
