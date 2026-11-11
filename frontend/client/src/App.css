@@ -77,7 +77,7 @@
   gap: 16px;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 20px clamp(16px, 4vw, 48px);
+  padding: 16px clamp(16px, 3vw, 40px);
 }
 .nav nav {
   display: flex;
@@ -91,7 +91,7 @@
   background: none;
   border: 0;
   padding: 0;
-  font-size: 26px;
+  font-size: 23px;
   font-weight: 700;
   letter-spacing: -0.03em;
   white-space: nowrap;
@@ -100,10 +100,10 @@
   position: relative;
   max-width: 1280px;
   margin: 0 auto;
-  padding: clamp(16px, 3vw, 40px) clamp(16px, 4vw, 48px) 80px;
+  padding: clamp(14px, 2.5vw, 32px) clamp(16px, 3vw, 40px) 60px;
 }
 .page-title {
-  font-size: clamp(48px, 7vw, 112px);
+  font-size: clamp(40px, 6vw, 88px);
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 0.95;
@@ -144,7 +144,7 @@
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: clamp(28px, 3vw, 44px);
+  gap: clamp(22px, 2.5vw, 34px);
   padding: 10px;
 }
 /* Activity cards are sticky notes: a coloured backing peeks out and each
@@ -175,9 +175,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  min-height: 280px;
-  padding: clamp(22px, 2vw, 30px);
+  gap: 16px;
+  min-height: 240px;
+  padding: clamp(18px, 1.7vw, 24px);
   border-radius: 6px;
   color: var(--ink);
 }
@@ -185,7 +185,7 @@
 .card-mint { background: var(--mint); }
 .card-orange { background: var(--orange); }
 .card-title {
-  font-size: clamp(24px, 2vw, 32px);
+  font-size: clamp(21px, 1.8vw, 28px);
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.01em;
@@ -202,6 +202,9 @@
   font-size: 15px;
   text-transform: uppercase;
   line-height: 1.5;
+}
+.card-meta .card-time {
+  text-transform: none;
 }
 .card-error {
   font-size: 14px;
@@ -758,7 +761,7 @@
 }
 .welcome-brand {
   margin-top: 12px;
-  font-size: clamp(64px, 9vw, 170px);
+  font-size: clamp(54px, 8vw, 136px);
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 0.95;
@@ -766,7 +769,7 @@
 .welcome-tagline {
   color: var(--ink-soft);
   font-size: clamp(19px, 1.8vw, 32px);
-  margin: 20px 0 36px;
+  margin: 16px 0 28px;
   max-width: 30ch;
   text-wrap: balance;
 }
@@ -782,8 +785,8 @@
   color: var(--cream);
   border: 0;
   border-radius: 999px;
-  padding: 20px 40px;
-  font-size: clamp(18px, 1.5vw, 26px);
+  padding: 15px 30px;
+  font-size: clamp(16px, 1.3vw, 22px);
   font-weight: 600;
   box-shadow: 0 6px 0 var(--orange);
   transition: transform 150ms ease, box-shadow 150ms ease;

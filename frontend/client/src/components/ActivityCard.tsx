@@ -32,7 +32,7 @@ export function ActivityCard({ activity, index }: { activity: Activity; index: n
           {activity.name}
         </h3>
         <div className="card-meta">
-          <p>{formatWhen(activity.startTime, activity.endTime)}</p>
+          <p className="card-time">{formatWhen(activity.startTime, activity.endTime)}</p>
           <p>{activity.location}</p>
         </div>
         {join.kind === 'error' && (

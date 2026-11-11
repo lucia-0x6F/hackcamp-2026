@@ -14,7 +14,7 @@
   --sans: 'Space Grotesk', system-ui, sans-serif;
   --mono: 'Courier Prime', ui-monospace, monospace;
 
-  font: 16px/1.45 var(--sans);
+  font: 15px/1.45 var(--sans);
   color: var(--ink);
   background: var(--cream);
   -webkit-font-smoothing: antialiased;
