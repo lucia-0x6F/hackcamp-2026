@@ -1,19 +1,19 @@
 $kind: collection
 description: ""
 variables:
-  - key: auth_secret_0zc1
-    secret: true
-    disabled: false
-  - key: auth_secret_09it
-    secret: true
-    disabled: false
-  - key: jwt
-    secret: true
-    disabled: false
-  - key: BASE_URL
-    value: ""
-    disabled: false
+  auth_secret_0zc1: ""
+  auth_secret_09it: ""
+  jwt: ""
+  BASE_URL: ""
+scripts:
+  - type: http:beforeRequest
+    code: |-
+      if (pm.info.requestName !== "GET /api/profile - 401 no token") {
+        pm.request.headers.upsert({
+          key: "Authorization",
+          value: "Bearer " + pm.variables.get("JWT_FROM_CI")
+        });
+      }
+    language: text/javascript
 auth:
-  type: bearer
-  credentials:
-    token: "{{jwt}}"
+  type: noauth
