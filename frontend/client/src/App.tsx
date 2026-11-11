@@ -114,7 +114,6 @@ function MainApp({
             {page === 'mine' && <MyActivities userId={userId} refreshKey={dataRevision} onDiscover={() => navigate('discover')} />}
             {page === 'profile' && (
             <Profile
-              key={profile ? 'saved' : 'new'}
               initial={profile ?? { ...emptyProfile, schoolId: defaultSchoolId }}
               onSaved={saveProfile}
             />
