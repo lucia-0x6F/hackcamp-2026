@@ -12,7 +12,7 @@ const YEARS: ProfileData["schoolYear"][] = [
   "fourth+",
   "graduate",
 ];
-const PRONOUNS: NonNullable<ProfileData["pronoun"]>[] = ["she/her", "he/him", "they/them", "prefer not to say"];
+const PRONOUNS: NonNullable<ProfileData["pronoun"]>[] = ["she/her", "he/him", "they/them"];
 
 export function Profile({
   initial,
@@ -101,8 +101,12 @@ export function Profile({
           <label>
             Pronouns <span className="optional">optional</span>
             <select value={profile.pronoun ?? ""} onChange={(e) => update("pronoun", (e.target.value || null) as ProfileData["pronoun"])}>
-              <option value="">Prefer not to share</option>
-              {PRONOUNS.map((pronoun) => <option key={pronoun} value={pronoun}>{pronoun}</option>)}
+              <option value="">Prefer not to say</option>
+              {PRONOUNS.map((pronoun) => (
+                <option key={pronoun} value={pronoun}>
+                  {pronoun.charAt(0).toUpperCase() + pronoun.slice(1)}
+                </option>
+              ))}
             </select>
           </label>
           <label>
