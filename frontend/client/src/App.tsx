@@ -128,10 +128,13 @@ function LiveApp() {
   if (isLoading) return <p className="status page">Loading…</p>;
 
   if (error) {
+    const accountAlreadyExists = /already exists|user exists|email.*(exists|registered)/i.test(error.message);
     return (
       <div className="page">
         <p className="status status-error" role="alert">
-          Sign-in problem: {error.message}
+          {accountAlreadyExists
+            ? 'This email is already registered. Please use Log in instead.'
+            : `Sign-in problem: ${error.message}`}
         </p>
         <button className="cta" onClick={logOut}>
           Back to start
