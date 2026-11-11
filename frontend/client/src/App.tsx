@@ -10,6 +10,7 @@ import { MyActivities } from './pages/MyActivities';
 import { Profile } from './pages/Profile';
 import { SignUp } from './pages/SignUp';
 import { Welcome } from './pages/Welcome';
+import { VerifyEmail } from './pages/VerifyEmail';
 import './App.css';
 
 const emptyProfile: ProfileData = { schoolId: 1, name: '', schoolYear: 'first', major: null, hobbies: [], interestedTypes: [] };
@@ -176,6 +177,20 @@ function LiveApp() {
         onLogIn={(email) => loginWithRedirect({ authorizationParams: { login_hint: email, scope: 'openid profile email' } })}
       />
     );
+
+  if (user.email_verified !== true) {
+    return (
+      <VerifyEmail
+        email={user.email ?? ''}
+        onCheckAgain={async () => {
+          // Force Auth0 to refresh its session so the updated email_verified
+          // claim is available after the user clicks the verification link.
+          await loginWithRedirect({ authorizationParams: { prompt: 'login' } });
+        }}
+        onLogOut={logOut}
+      />
+    );
+  }
 
   return (
     <MainApp

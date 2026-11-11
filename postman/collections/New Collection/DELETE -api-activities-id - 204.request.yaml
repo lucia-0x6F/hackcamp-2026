@@ -1,0 +1,16 @@
+$kind: http-request
+name: DELETE /api/activities/:id - 204 cleanup
+description: Deletes the activity created by the POST test. Run last; only the creator can delete it.
+url: "{{BASE_URL}}/api/activities/{{activityId}}"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{ACCESS_TOKEN}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 204", () => pm.response.to.have.status(204));
+      pm.test("Response body is empty", () => pm.expect(pm.response.text()).to.eql(""));
+    language: text/javascript
+order: 900

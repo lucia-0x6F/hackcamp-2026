@@ -1,0 +1,37 @@
+$kind: http-request
+name: PUT /api/activities/:id - 200 update
+description: Updates the activity created by the POST test. Run before the DELETE cleanup request.
+url: "{{BASE_URL}}/api/activities/{{activityId}}"
+method: PUT
+body:
+  type: json
+  content: |-
+    {
+      "name": "Updated Postman API test activity",
+      "description": "Updated by the Postman test collection",
+      "type": "career",
+      "location": "Student Union",
+      "startTime": "2099-01-02T18:00:00.000Z",
+      "endTime": "2099-01-02T19:00:00.000Z",
+      "link": null
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{ACCESS_TOKEN}}"
+headers:
+  - key: Content-Type
+    value: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      pm.test("Status code is 200", () => pm.response.to.have.status(200));
+      pm.test("Activity was updated", () => {
+        pm.expect(json.data.id).to.eql(pm.variables.get("activityId"));
+        pm.expect(json.data.name).to.eql("Updated Postman API test activity");
+        pm.expect(json.data.type).to.eql("career");
+        pm.expect(json.data.link).to.eql(null);
+      });
+    language: text/javascript
+order: 220

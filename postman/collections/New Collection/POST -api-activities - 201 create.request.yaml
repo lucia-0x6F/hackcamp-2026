@@ -1,0 +1,38 @@
+$kind: http-request
+name: POST /api/activities - 201 create
+description: Creates a future activity and stores its id for the following requests.
+url: "{{BASE_URL}}/api/activities"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "name": "Postman API test activity",
+      "description": "Created by the Postman test collection",
+      "type": "study",
+      "location": "Library",
+      "startTime": "2099-01-01T18:00:00.000Z",
+      "endTime": "2099-01-01T20:00:00.000Z",
+      "link": "https://example.com/postman"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{ACCESS_TOKEN}}"
+headers:
+  - key: Content-Type
+    value: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      const json = pm.response.json();
+      const a = json.data;
+      pm.test("Status code is 201", () => pm.response.to.have.status(201));
+      pm.test("Created activity has the documented fields", () => {
+        pm.expect(a).to.include.all.keys("id", "creatorId", "schoolId", "name", "description", "type", "location", "startTime", "endTime", "link");
+        pm.expect(a.id).to.be.a("string");
+        pm.expect(a.type).to.eql("study");
+      });
+      pm.collectionVariables.set("activityId", a.id);
+    language: text/javascript
+order: 200

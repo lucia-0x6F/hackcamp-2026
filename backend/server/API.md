@@ -22,7 +22,7 @@ Protected endpoints require an Auth0 access token:
 Authorization: Bearer <access_token>
 ```
 
-The access token must be valid and include a valid account email. Email verification and school-domain restrictions are not enforced by the API.
+The access token must be valid, include a valid account email, and have `email_verified: true`. Requests from unverified accounts are rejected with `403`. School-domain restrictions are not enforced by the API.
 
 ## Common response format
 

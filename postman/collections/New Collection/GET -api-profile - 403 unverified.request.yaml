@@ -1,0 +1,17 @@
+$kind: http-request
+name: GET /api/profile - 403 unverified email (manual token)
+description: Use a valid Auth0 token whose email_verified claim is false. The normal ACCESS_TOKEN must be a verified account token.
+url: "{{BASE_URL}}/api/profile"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{UNVERIFIED_ACCESS_TOKEN}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 403", () => pm.response.to.have.status(403));
+      const json = pm.response.json();
+      pm.test("Explains that email verification is required", () => pm.expect(json.error).to.include("verify"));
+    language: text/javascript
+order: 120

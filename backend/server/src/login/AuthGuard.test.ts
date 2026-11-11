@@ -12,8 +12,8 @@ function response() {
 }
 
 describe('AuthGuard account email resolution', () => {
-  it('accepts a valid Auth0 email claim without email_verified', async () => {
-    const req = request({ sub: 'auth0|student-1', email: 'student@gmail.com' });
+  it('accepts a valid verified Auth0 email claim', async () => {
+    const req = request({ sub: 'auth0|student-1', email: 'student@gmail.com', email_verified: true });
     const res = response();
     const next = vi.fn();
 
@@ -25,6 +25,17 @@ describe('AuthGuard account email resolution', () => {
       id: 'auth0|student-1',
       email: 'student@gmail.com',
     });
+  });
+
+  it('rejects an authenticated token whose email is not verified', async () => {
+    const req = request({ sub: 'auth0|student-1', email: 'student@gmail.com', email_verified: false });
+    const res = response();
+    const next = vi.fn();
+
+    await AuthGuard.requireAccountEmail(req, res, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(403);
   });
 
   it('rejects an authenticated token with no account email', async () => {
