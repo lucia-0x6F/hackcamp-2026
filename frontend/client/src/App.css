@@ -204,7 +204,7 @@
   line-height: 1.5;
 }
 .card-meta .card-time {
-  text-transform: none;
+  text-transform: none !important;
 }
 .card-error {
   font-size: 14px;
