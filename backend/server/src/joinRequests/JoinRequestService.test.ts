@@ -24,7 +24,9 @@ describe('JoinRequestService permissions and status rules', () => {
   it('creates a pending request for a profiled non-creator and notifies the creator', async () => {
     const { requests, activities, users, service } = setup();
     vi.mocked(activities.findById).mockResolvedValue(activity);
-    vi.mocked(users.find).mockResolvedValue({ email: 'creator@example.com', name: 'Creator' } as any);
+    vi.mocked(users.find)
+      .mockResolvedValueOnce({ email: 'creator@example.com', name: 'Creator' } as any)
+      .mockResolvedValueOnce({ email: 'applicant@example.com', name: 'Applicant' } as any);
     vi.mocked(requests.create).mockImplementation(async (value) => value);
 
     const result = await service.create(applicant, activity.id);

@@ -1,6 +1,7 @@
 import type { EmailService } from './EmailService.js';
 import type { ActivityRecord } from '../repositories/ActivityRepository.js';
 import type { JoinRequestRecord } from '../repositories/JoinRequestRepository.js';
+import type { User } from '../domain/User.js';
 
 type JoinRequestDecision = 'accepted' | 'rejected';
 
@@ -23,12 +24,21 @@ export class NotificationService {
     creatorEmail: string,
     activity: ActivityRecord,
     request: JoinRequestRecord,
+    applicant: User,
   ): Promise<void> {
     const subject = `New join request for ${activity.name}`;
 
     const body = [
       `A student has requested to join your activity: ${activity.name}.`,
       '',
+      'Applicant profile:',
+      `Name:          ${applicant.name}`,
+      `Email:         ${applicant.email}`,
+      `School ID:     ${applicant.schoolId}`,
+      `Year:          ${applicant.schoolYear}`,
+      `Major:         ${applicant.major ?? 'Not specified'}`,
+      `Hobbies:       ${applicant.hobbies.length ? applicant.hobbies.join(', ') : 'Not specified'}`,
+      `Interested in: ${applicant.interestedTypes.length ? applicant.interestedTypes.join(', ') : 'Not specified'}`,
       `Location:   ${activity.location}`,
       `Starts:     ${activity.startTime}`,
       `Ends:       ${activity.endTime}`,

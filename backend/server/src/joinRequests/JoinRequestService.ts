@@ -35,10 +35,13 @@ export class JoinRequestService {
         createdAt: new Date().toISOString(),
       });
 
-      const creator = await this.users.find(activity.creatorId);
-      if (creator) {
+      const [creator, applicant] = await Promise.all([
+        this.users.find(activity.creatorId),
+        this.users.find(auth.id),
+      ]);
+      if (creator && applicant) {
         await this.sendNotificationSafely(() =>
-          this.notifications.notifyActivityCreatorOfJoinRequest(creator.email, activity, request),
+          this.notifications.notifyActivityCreatorOfJoinRequest(creator.email, activity, request, applicant),
         );
       }
 
