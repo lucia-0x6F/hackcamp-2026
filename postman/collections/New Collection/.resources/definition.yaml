@@ -1,1 +1,59 @@
 $kind: collection
+variables:
+  - key: json_web_token_0e1u
+    secret: true
+    disabled: false
+  - key: json_web_token_0e1u
+    secret: true
+    disabled: false
+  - key: json_web_token_0e1u
+    secret: true
+    disabled: false
+  - key: json_web_token_0e1u
+    secret: true
+    disabled: false
+  - key: json_web_token_0e1u
+    secret: true
+    disabled: false
+  - key: json_web_token_0e1u
+    secret: true
+    disabled: false
+  - key: json_web_token_0e1u
+    secret: true
+    disabled: false
+  - key: json_web_token_0e1u
+    secret: true
+    disabled: false
+  - key: json_web_token_0e1u
+    secret: true
+    disabled: false
+  - key: json_web_token_0e1u
+    secret: true
+    disabled: false
+  - key: json_web_token_0e1u
+    secret: true
+    disabled: false
+  - key: json_web_token_0h4n
+    secret: true
+    disabled: false
+  - key: json_web_token_0h4n
+    secret: true
+    disabled: false
+  - key: json_web_token_0h4n
+    secret: true
+    disabled: false
+  - key: json_web_token_0h4n
+    secret: true
+    disabled: false
+  - key: json_web_token_0h4n
+    secret: true
+    disabled: false
+  - key: "1110"
+    secret: true
+    disabled: false
+auth:
+  - id: a0c20bb7-e904-437c-8087-9059fa3e7c54
+    type: bearer
+    name: Bearer Token
+    credentials:
+      token: ""
