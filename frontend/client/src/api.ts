@@ -96,6 +96,7 @@ const liveApi = {
   createActivity: (input: ActivityInput) =>
     request<Activity>('/api/activities', { method: 'POST', body: JSON.stringify(input) }),
   getActivity: (id: string) => request<Activity>(`/api/activities/${encodeURIComponent(id)}`),
+  deleteActivity: (id: string) => request<void>(`/api/activities/${encodeURIComponent(id)}`, { method: 'DELETE' }),
   requestToJoin: (activityId: string) =>
     request<JoinRequest>(`/api/join-requests/${encodeURIComponent(activityId)}/join`, { method: 'POST' }),
   /** Requests I've sent, newest first. */

@@ -106,6 +106,15 @@ export function MyActivities({ userId, refreshKey, onDiscover }: { userId: strin
                         </p>
                       </div>
                       <span className="tag-count">{going.length} going</span>
+                      <button
+                        className="pill pill-sm"
+                        disabled={busy === activity.id}
+                        onClick={() => {
+                          if (window.confirm('Delete this activity?')) void act(activity.id, () => api.deleteActivity(activity.id));
+                        }}
+                      >
+                        Delete
+                      </button>
                     </header>
                     {pending.length === 0 ? (
                       <p className="mine-empty">No new requests.</p>

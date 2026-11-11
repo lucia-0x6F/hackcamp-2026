@@ -53,6 +53,12 @@ export class SqliteActivityRepository implements ActivityRepository {
       }) as ActivityRecord[];
   }
 
+  async cleanupExpired() {
+    this.database
+      .prepare("UPDATE activities SET deleted_at=datetime('now') WHERE deleted_at IS NULL AND end_time <= datetime('now')")
+      .run();
+  }
+
   async update(id: string, a: Partial<Omit<ActivityRecord, 'id' | 'creatorId'>>) {
     const entries = Object.entries(a).filter(([, v]) => v !== undefined);
     if (!entries.length) {

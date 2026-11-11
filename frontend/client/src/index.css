@@ -9,10 +9,10 @@
   --pink: #e36a86;
   --olive: #8b9b52;
   --yellow: #e7d56a;
-  --tan: #f3e6ad;
+  --tan: #dcb492;
 
-  --sans: 'DM Sans', system-ui, sans-serif;
-  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --sans: 'Space Grotesk', system-ui, sans-serif;
+  --mono: 'Courier Prime', ui-monospace, monospace;
 
   font: 15px/1.45 var(--sans);
   color: var(--ink);

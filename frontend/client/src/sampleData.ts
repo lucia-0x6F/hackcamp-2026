@@ -53,6 +53,12 @@ export const sampleApi: Api = {
     const found = activities.find((a) => a.id === id);
     return found ? delay(found) : Promise.reject(new Error('Activity not found'));
   },
+  deleteActivity: (id) => {
+    const i = activities.findIndex((a) => a.id === id && a.creatorId === 'me');
+    if (i < 0) return Promise.reject(new Error('Activity not found or not owned by you'));
+    activities.splice(i, 1);
+    return delay(undefined);
+  },
   requestToJoin: (activityId) => {
     const r: JoinRequest = { id: crypto.randomUUID(), activityId, userId: 'me', status: 'pending', createdAt: new Date().toISOString() };
     requests.push(r);

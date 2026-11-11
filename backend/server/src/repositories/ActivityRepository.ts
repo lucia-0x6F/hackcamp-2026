@@ -13,6 +13,7 @@ export interface ActivityRepository {
   create(activity: ActivityRecord): Promise<ActivityRecord>;
   findById(id: string): Promise<ActivityRecord | null>;
   list(filters: ActivityFilters): Promise<ActivityRecord[]>;
+  cleanupExpired(): Promise<void>;
   update(id: string, activity: Partial<Omit<ActivityRecord, 'id' | 'creatorId'>>): Promise<ActivityRecord | null>;
   delete(id: string, creatorId: string): Promise<boolean>;
 }

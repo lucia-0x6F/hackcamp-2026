@@ -29,7 +29,8 @@ export class ActivityService {
     });
   }
 
-  get(id: string) {
+  async get(id: string) {
+    await this.activities.cleanupExpired?.();
     return this.activities.findById(id);
   }
 
@@ -42,6 +43,7 @@ export class ActivityService {
       throw new AppError('Complete your profile first', 400);
     }
 
+    await this.activities.cleanupExpired?.();
     return this.activities.list({ schoolId: user.schoolId, ...filters });
   }
 
