@@ -20,4 +20,5 @@ jobs:
         run: |
           postman collection run "60080921-e4adbfab-be49-4e19-bb34-afc19e849232" \
             --postman-api-key "$POSTMAN_API_KEY" \
-            --env-var "BASE_URL=https://hackcamp-2026.vercel.app"
+            --env-var "BASE_URL=https://hackcamp-2026.vercel.app" \
+            --env-var "jwt=${{ secrets.JWT_TOKEN }}"
