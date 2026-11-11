@@ -1,8 +1,8 @@
 $kind: collection
+description: ""
 variables:
   - key: json_web_token_0e1u
     secret: true
-    disabled: false
   - key: json_web_token_0e1u
     secret: true
     disabled: false
@@ -35,7 +35,6 @@ variables:
     disabled: false
   - key: json_web_token_0h4n
     secret: true
-    disabled: false
   - key: json_web_token_0h4n
     secret: true
     disabled: false
@@ -50,7 +49,10 @@ variables:
     disabled: false
   - key: "1110"
     secret: true
-    disabled: false
+  - key: auth_secret_0zc1
+    secret: true
+  - key: auth_secret_09it
+    secret: true
 auth:
   - id: a0c20bb7-e904-437c-8087-9059fa3e7c54
     type: bearer

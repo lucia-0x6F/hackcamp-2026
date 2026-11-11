@@ -28,7 +28,7 @@ auth:
     addTokenTo: header
     redirect_uri: https://oauth.pstmn.io/v1/browser-callback
     authUrl: https://dev-e1lw72owcfk34cgi.us.auth0.com/authorize
-    clientId: UQJvcorSfyLsLRvCDuuszlxFLH9W82A8
+    clientId: "{{auth_secret_0zc1}}"
     scope: openid profile email
     authRequestParams:
       - key: audience
@@ -40,28 +40,34 @@ auth:
     refreshRequestParams: []
     refreshTokenUrl: https://dev-e1lw72owcfk34cgi.us.auth0.com/oauth/token
     tokenRequestParams: []
-    clientSecret: m87YMzG4kyG2KXaQLTRtepqNy6Wwd-2YpZexOn_Xxxr-E37X2nKuRSwuI3KtKJbm
+    clientSecret: "{{auth_secret_09it}}"
     tokenName: "1110"
 scripts:
   - type: afterResponse
-    code: |-
+    code: >-
       const json = pm.response.json();
+
 
       pm.test("Status code is 200", () => {
         pm.response.to.have.status(200);
       });
+
 
       pm.test("Response is JSON and data is an array", () => {
         pm.expect(pm.response.headers.get("Content-Type")).to.include("application/json");
         pm.expect(json).to.have.property("data").that.is.an("array");
       });
 
+
       pm.test("Response time is under 1000 ms", () => {
         pm.expect(pm.response.responseTime).to.be.below(1000);
       });
 
+
       // The checks below only run when the list is not empty
+
       const activities = json.data || [];
+
 
       pm.test("Each activity contains all documented fields", () => {
         activities.forEach(a => {
@@ -71,6 +77,7 @@ scripts:
           );
         });
       });
+
 
       pm.test("Field types are correct", () => {
         activities.forEach(a => {
@@ -87,12 +94,15 @@ scripts:
         });
       });
 
+
       pm.test("type is a valid activity type", () => {
         const valid = ["study", "food", "sports", "career", "other"];
         activities.forEach(a => pm.expect(valid).to.include(a.type));
       });
 
-      pm.test("startTime and endTime are valid ISO dates, end is after start", () => {
+
+      pm.test("startTime and endTime are valid ISO dates, end is after start",
+      () => {
         activities.forEach(a => {
           const start = new Date(a.startTime);
           const end = new Date(a.endTime);
@@ -102,16 +112,19 @@ scripts:
         });
       });
 
+
       pm.test("Activities are upcoming (startTime is in the future)", () => {
         const now = Date.now();
         activities.forEach(a => pm.expect(new Date(a.startTime).getTime()).to.be.above(now));
       });
+
 
       pm.test("link is null or a valid http(s) URL", () => {
         activities.forEach(a => {
           if (a.link !== null) pm.expect(a.link).to.match(/^https?:\/\/.+/);
         });
       });
+
 
       pm.test("All activities belong to the same school", () => {
         if (activities.length > 0) {
@@ -120,7 +133,10 @@ scripts:
         }
       });
 
-      // Save the first activity id for later requests (GET /api/activities/:id, etc.)
+
+      // Save the first activity id for later requests (GET /api/activities/:id,
+      etc.)
+
       if (activities.length > 0) {
         pm.collectionVariables.set("activityId", activities[0].id);
       }

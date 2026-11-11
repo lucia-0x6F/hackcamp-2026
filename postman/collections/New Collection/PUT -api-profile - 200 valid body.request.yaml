@@ -20,7 +20,7 @@ auth:
     addTokenTo: header
     redirect_uri: https://oauth.pstmn.io/v1/browser-callback
     authUrl: https://dev-e1lw72owcfk34cgi.us.auth0.com/authorize
-    clientId: UQJvcorSfyLsLRvCDuuszlxFLH9W82A8
+    clientId: "{{auth_secret_0zc1}}"
     scope: openid profile email
     authRequestParams:
       - key: audience
@@ -32,22 +32,26 @@ auth:
     refreshRequestParams: []
     refreshTokenUrl: https://dev-e1lw72owcfk34cgi.us.auth0.com/oauth/token
     tokenRequestParams: []
-    clientSecret: m87YMzG4kyG2KXaQLTRtepqNy6Wwd-2YpZexOn_Xxxr-E37X2nKuRSwuI3KtKJbm
+    clientSecret: "{{auth_secret_09it}}"
     tokenName: "1110"
 scripts:
   - type: afterResponse
-    code: |-
+    code: >-
       const json = pm.response.json();
+
       const sent = JSON.parse(pm.request.body.raw);
+
 
       pm.test("Status code is 200", () => {
         pm.response.to.have.status(200);
       });
 
+
       pm.test("Response is JSON and contains data", () => {
         pm.expect(pm.response.headers.get("Content-Type")).to.include("application/json");
         pm.expect(json).to.have.property("data").that.is.an("object");
       });
+
 
       pm.test("data contains all profile fields", () => {
         pm.expect(json.data).to.include.all.keys(
@@ -55,6 +59,7 @@ scripts:
           "schoolYear", "major", "hobbies", "interestedTypes"
         );
       });
+
 
       pm.test("Saved profile matches the request body", () => {
         pm.expect(json.data.schoolId).to.eql(sent.schoolId);
@@ -64,6 +69,7 @@ scripts:
         pm.expect(json.data.hobbies).to.have.members(sent.hobbies);
         pm.expect(json.data.interestedTypes).to.have.members(sent.interestedTypes);
       });
+
 
       pm.test("id and email come from the token, not the body", () => {
         pm.expect(json.data.id).to.match(/^[^|]+\|.+$/);
