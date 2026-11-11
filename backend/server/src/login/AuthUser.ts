@@ -1,12 +1,11 @@
 export class AuthUser {
   constructor(
-    readonly id: string,     
+    readonly id: string,
     readonly email: string | null,
-    readonly emailVerified: boolean,
   ) {}
 
   canUseApp(): boolean {
-    return this.email !== null && this.emailVerified && AuthUser.isAllowedSchoolEmail(this.email);
+    return this.email !== null && AuthUser.isAllowedSchoolEmail(this.email);
   }
 
   static isAllowedSchoolEmail(email: string): boolean {

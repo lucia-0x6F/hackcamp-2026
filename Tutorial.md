@@ -57,7 +57,7 @@ The local `backend/server/.env` file is ignored by Git. Commit only `backend/ser
 
 ## Backend authentication
 
-The API uses Auth0-issued RS256 access tokens. Auth0 handles account creation, login, and email verification; the backend validates the bearer token and only allows verified addresses from:
+The API uses Auth0-issued RS256 access tokens. Auth0 handles account creation and login; the backend validates the bearer token and only allows addresses from:
 
 - `student.ubc.ca`
 - `sfu.ca`
@@ -72,13 +72,12 @@ AUTH0_AUDIENCE=https://YOUR_API_IDENTIFIER
 AUTH0_CLAIMS_NAMESPACE=https://oncampus.app
 ```
 
-In the Auth0 API settings, use RS256. Add a Post-Login Action to copy `email` and `email_verified` into the access token, because Auth0 does not normally include those claims in API access tokens:
+In the Auth0 API settings, use RS256. Add a Post-Login Action to copy `email` into the access token, because Auth0 does not normally include that claim in API access tokens:
 
 ```js
 exports.onExecutePostLogin = async (event, api) => {
   const ns = 'https://oncampus.app';
   if (event.user.email) api.accessToken.setCustomClaim(`${ns}/email`, event.user.email);
-  api.accessToken.setCustomClaim(`${ns}/email_verified`, event.user.email_verified === true);
 };
 ```
 

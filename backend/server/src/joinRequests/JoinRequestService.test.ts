@@ -7,8 +7,8 @@ import type { JoinRequestRepository, JoinRequestRecord } from '../repositories/J
 import type { UserRepository } from '../repositories/UserRepository.js';
 import type { EmailService } from '../notifications/EmailService.js';
 
-const creator = new AuthUser('creator', 'creator@student.ubc.ca', true);
-const applicant = new AuthUser('applicant', 'applicant@student.ubc.ca', true);
+const creator = new AuthUser('creator', 'creator@student.ubc.ca');
+const applicant = new AuthUser('applicant', 'applicant@student.ubc.ca');
 const activity: ActivityRecord = { id: 'activity-1', creatorId: creator.id, schoolId: 1, name: 'Study', description: '', type: 'study', location: 'Library', startTime: '2030-01-01T10:00:00.000Z', endTime: '2030-01-01T11:00:00.000Z', link: null };
 
 function setup() {

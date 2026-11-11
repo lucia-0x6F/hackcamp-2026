@@ -11,7 +11,7 @@ describe('RecommendationService', () => {
     ]) } as unknown as ActivityRepository;
     const user = { schoolId: 1, interestedTypes: ['study'], hobbies: [] };
     const users = { find: vi.fn().mockResolvedValue(user) } as unknown as UserRepository;
-    const result = await new RecommendationService(activities, users).forUser(new AuthUser('u', 'u@student.ubc.ca', true));
+    const result = await new RecommendationService(activities, users).forUser(new AuthUser('u', 'u@student.ubc.ca'));
     expect(result).toHaveLength(3);
     expect(result[0].type).toBe('study');
   });
@@ -19,6 +19,6 @@ describe('RecommendationService', () => {
   it('returns an empty list when the user has no profile', async () => {
     const activities = { list: vi.fn() } as unknown as ActivityRepository;
     const users = { find: vi.fn().mockResolvedValue(null) } as unknown as UserRepository;
-    await expect(new RecommendationService(activities, users).forUser(new AuthUser('u', 'u@student.ubc.ca', true))).resolves.toEqual([]);
+    await expect(new RecommendationService(activities, users).forUser(new AuthUser('u', 'u@student.ubc.ca'))).resolves.toEqual([]);
   });
 });

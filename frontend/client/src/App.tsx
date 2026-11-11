@@ -9,7 +9,6 @@ import { LogIn } from './pages/LogIn';
 import { MyActivities } from './pages/MyActivities';
 import { Profile } from './pages/Profile';
 import { SignUp } from './pages/SignUp';
-import { VerifyEmail } from './pages/VerifyEmail';
 import { Welcome } from './pages/Welcome';
 import './App.css';
 
@@ -117,8 +116,7 @@ function SampleApp() {
 
 /**
  * Real sign-in through Auth0. Auth0 hosts the sign-up/login pages and sends
- * the verify-your-email message; the backend rejects tokens whose email
- * isn't verified, so unverified students wait on the VerifyEmail screen.
+ * the Auth0 sign-up page; the backend checks the school email domain.
  */
 function LiveApp() {
   const { isLoading, isAuthenticated, user, error, loginWithRedirect, logout, getAccessTokenSilently } = useAuth0();
@@ -150,18 +148,6 @@ function LiveApp() {
           loginWithRedirect({ authorizationParams: { screen_hint: 'signup', login_hint: email } })
         }
         onLogIn={(email) => loginWithRedirect({ authorizationParams: { login_hint: email } })}
-      />
-    );
-
-  if (!user.email_verified)
-    return (
-      <VerifyEmail
-        email={user.email ?? 'your school email'}
-        onCheckAgain={async () => {
-          // Fetch fresh tokens so Auth0 re-reads email_verified.
-          await getAccessTokenSilently({ cacheMode: 'off' });
-        }}
-        onLogOut={logOut}
       />
     );
 

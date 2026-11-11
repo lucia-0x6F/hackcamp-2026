@@ -7,8 +7,8 @@ import { AuthUser } from '../login/AuthUser.js';
 import type { ActivityRepository, ActivityRecord } from '../repositories/ActivityRepository.js';
 import type { UserRepository } from '../repositories/UserRepository.js';
 
-const auth = new AuthUser('user-1', 'user@student.ubc.ca', true);
-const otherAuth = new AuthUser('user-2', 'other@student.ubc.ca', true);
+const auth = new AuthUser('user-1', 'user@student.ubc.ca');
+const otherAuth = new AuthUser('user-2', 'other@student.ubc.ca');
 const input = { name: 'Study group', description: 'Review notes', type: 'study' as const, location: 'Library', startTime: '2030-01-01T10:00:00Z', endTime: '2030-01-01T11:00:00Z', link: null };
 const activity: ActivityRecord = { id: 'activity-1', creatorId: auth.id, schoolId: 1, ...input, startTime: new Date(input.startTime).toISOString(), endTime: new Date(input.endTime).toISOString() };
 

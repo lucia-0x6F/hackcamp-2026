@@ -10,7 +10,7 @@ const NOTES = [
 /**
  * Step 1 of sign-up: pick your school and enter your school email.
  * We never ask for a password here. Auth0 handles login and email
- * verification, and the backend only accepts verified school emails.
+ * verification. The backend checks that the email uses an allowed school domain.
  * Continue hands over to Auth0's sign-up page (prefilled with this email),
  * which sends the verify-your-email message. In sample mode it goes straight
  * to profile setup.

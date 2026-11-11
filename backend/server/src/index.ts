@@ -80,7 +80,7 @@ const requireConfiguredAuth = (
     res.status(503).json({ error: 'Authentication is not configured' });
     return;
   }
-  AuthGuard.requireVerified(req, res, next);
+  AuthGuard.requireSchoolEmail(req, res, next);
 };
 
 

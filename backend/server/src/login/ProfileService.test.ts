@@ -11,7 +11,7 @@ describe('ProfileService', () => {
     const users = { find: vi.fn(), exists: vi.fn(), save: vi.fn() } as unknown as UserRepository;
     const schools = { mustFind: vi.fn().mockReturnValue({ id: 1, name: 'UBC', emailDomain: 'student.ubc.ca' }), list: vi.fn() } as unknown as SchoolRepository;
     const service = new ProfileService(users, schools);
-    const result = await service.save(new AuthUser('user-1', 'alice@student.ubc.ca', true), profile);
+    const result = await service.save(new AuthUser('user-1', 'alice@student.ubc.ca'), profile);
     expect(result.email).toBe('alice@student.ubc.ca');
     expect(users.save).toHaveBeenCalled();
   });
@@ -20,6 +20,6 @@ describe('ProfileService', () => {
     const users = { find: vi.fn(), exists: vi.fn(), save: vi.fn() } as unknown as UserRepository;
     const schools = { mustFind: vi.fn().mockReturnValue({ id: 1, name: 'UBC', emailDomain: 'student.ubc.ca' }), list: vi.fn() } as unknown as SchoolRepository;
     const service = new ProfileService(users, schools);
-    await expect(service.save(new AuthUser('user-1', 'alice@sfu.ca', true), profile)).rejects.toMatchObject({ status: 400 });
+    await expect(service.save(new AuthUser('user-1', 'alice@sfu.ca'), profile)).rejects.toMatchObject({ status: 400 });
   });
 });
