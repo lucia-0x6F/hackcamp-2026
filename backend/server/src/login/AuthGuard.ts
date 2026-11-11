@@ -13,14 +13,9 @@ export class AuthGuard {
 
     // Auth0 may include email directly or under the configured namespace.
     const email = (payload.email as string | undefined) ?? (payload[`${NS}/email`] as string | undefined) ?? null;
-    const user = new AuthUser(payload.sub, email?.trim().toLowerCase() ?? null);
-
-    if (!user.canUseApp()) {
-      res.status(403).json({ error: 'A valid account email is required' });
-      return;
-    }
-
-    res.locals.user = user;
+    // `sub` has already been verified by the JWT middleware. Do not require
+    // an email claim: Auth0 access tokens commonly omit it.
+    res.locals.user = new AuthUser(payload.sub, email?.trim().toLowerCase() ?? null);
     next();
   }
 }

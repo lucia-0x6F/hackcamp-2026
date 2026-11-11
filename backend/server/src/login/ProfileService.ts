@@ -19,10 +19,10 @@ export class ProfileService {
     const isNewUser = !(await this.users.exists(auth.id));
     let school;
     try { school = this.schools.mustFind(input.schoolId); } catch { throw new AppError('School not found', 400); }
-    if (!auth.email) throw new AppError('A valid account email is required', 400);
-    const user = User.create(auth.id, input, auth.email!);
+    const user = User.create(auth.id, input, auth.storageEmail());
     await this.users.save(user);
-    if (isNewUser && this.notifications) {
+    // Only send email when Auth0 actually supplied a deliverable address.
+    if (isNewUser && this.notifications && auth.email) {
       try {
         await this.notifications.notifyWelcome(user.email, user.name);
       } catch (error) {
