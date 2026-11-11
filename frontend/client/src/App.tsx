@@ -116,7 +116,7 @@ function SampleApp() {
 
 /**
  * Real sign-in through Auth0. Auth0 hosts the sign-up/login pages and sends
- * the Auth0 sign-up page; the backend checks the school email domain.
+ * the Auth0 sign-up page; the backend accepts any account email.
  */
 function LiveApp() {
   const { isLoading, isAuthenticated, user, error, loginWithRedirect, logout, getAccessTokenSilently } = useAuth0();

@@ -41,7 +41,7 @@ export function Welcome({ onSignUp, onLogIn }: { onSignUp: () => void; onLogIn: 
           Don't miss out just because you <strong>don't have someone to go with.</strong>
         </p>
         <button className="cta" onClick={onSignUp}>
-          Sign up with school email <span className="cta-arrow" aria-hidden="true">→</span>
+          Sign up with email <span className="cta-arrow" aria-hidden="true">→</span>
         </button>
         <p className="cta-hint">UBC · SFU · UVic</p>
         <p className="welcome-login">

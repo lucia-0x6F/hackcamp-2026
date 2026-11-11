@@ -89,7 +89,7 @@ export function SignUp({
           />
         </label>
         <p id="signup-help" className={touched && error ? 'field-error' : 'field-help'} role={touched && error ? 'alert' : undefined}>
-          {touched && error ? error : "Enter the email address associated with your account."}
+          {touched && error ? error : 'Any valid email address works.'}
         </p>
         <button className="cta">
           Continue <span className="cta-arrow" aria-hidden="true">→</span>

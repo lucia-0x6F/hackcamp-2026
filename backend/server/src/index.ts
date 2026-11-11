@@ -80,7 +80,7 @@ const requireConfiguredAuth = (
     res.status(503).json({ error: 'Authentication is not configured' });
     return;
   }
-  AuthGuard.requireSchoolEmail(req, res, next);
+  AuthGuard.requireAccountEmail(req, res, next);
 };
 
 
@@ -154,7 +154,7 @@ const errors: ErrorRequestHandler = (error, _req, res, _next) => {
     res.status(error.status).json({ error: error.message });
     return;
   }
-  // A user can change Auth0 accounts while keeping the same school email.
+  // A user can change Auth0 accounts while keeping the same email.
   // SQLite rejects that duplicate email, so return a useful client error
   // instead of hiding it behind a generic 500 response.
   if (error instanceof Error && error.message.includes('UNIQUE constraint failed: users.email')) {

@@ -4,7 +4,7 @@ import { AuthUser } from './AuthUser.js';
 const NS = process.env.AUTH0_CLAIMS_NAMESPACE ?? 'https://oncampus.app';
 
 export class AuthGuard {
-  static requireSchoolEmail(req: Request, res: Response, next: NextFunction): void {
+  static requireAccountEmail(req: Request, res: Response, next: NextFunction): void {
     const payload = req.auth?.payload;
     if (!payload?.sub) {
       res.status(401).json({ error: 'Unauthorized' });

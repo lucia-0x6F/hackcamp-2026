@@ -56,7 +56,7 @@ export const setTokenGetter = (fn: (() => Promise<string | undefined>) | null) =
   getToken = fn;
 };
 
-/** Error from the API that keeps the HTTP status, e.g. 403 for an unverified email. */
+/** Error from the API that keeps the HTTP status. */
 export class ApiError extends Error {
   readonly status: number;
   constructor(message: string, status: number) {

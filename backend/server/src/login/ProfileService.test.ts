@@ -7,7 +7,7 @@ import type { SchoolRepository } from '../repositories/SchoolRepository.js';
 const profile = { schoolId: 1, name: 'Alice', schoolYear: 'first' as const, major: 'CS', hobbies: ['music'], interestedTypes: ['study' as const] };
 
 describe('ProfileService', () => {
-  it('saves a profile when the email matches the school', async () => {
+  it('saves a profile for a valid account email', async () => {
     const users = { find: vi.fn(), exists: vi.fn(), save: vi.fn() } as unknown as UserRepository;
     const schools = { mustFind: vi.fn().mockReturnValue({ id: 1, name: 'UBC', emailDomain: 'student.ubc.ca' }), list: vi.fn() } as unknown as SchoolRepository;
     const service = new ProfileService(users, schools);
