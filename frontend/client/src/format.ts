@@ -21,7 +21,7 @@ const clock = (d: Date) => {
   return `${h}${m ? `:${String(m).padStart(2, '0')}` : ''}${d.getHours() < 12 ? 'AM' : 'PM'}`;
 };
 
-/** "Today, 3:30 - 5PM" / "Tomorrow, 2 - 3PM" / "Nov 12, 6 - 8PM" */
+/** "Today, 3:30 - 5PM" / "Tomorrow, 2 - 3PM" / "November 12, 6 - 8PM" */
 export function formatWhen(startIso: string, endIso: string, now = new Date()): string {
   const start = new Date(startIso);
   const end = new Date(endIso);
@@ -31,7 +31,7 @@ export function formatWhen(startIso: string, endIso: string, now = new Date()): 
     ? 'Today'
     : sameDay(start, tomorrow)
       ? 'Tomorrow'
-      : start.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+      : start.toLocaleDateString('en-CA', { month: 'long', day: 'numeric' });
   const startClock = clock(start);
   const endClock = clock(end);
   // Drop the first AM/PM when both times share it: "3:30 - 5PM".
@@ -39,6 +39,6 @@ export function formatWhen(startIso: string, endIso: string, now = new Date()): 
   return `${day}, ${sameHalf ? startClock.slice(0, -2) : startClock} - ${endClock}`;
 }
 
-/** "NOV 07 2026" */
+/** "November 07 2026" */
 export const formatHeaderDate = (d = new Date()) =>
-  `${d.toLocaleDateString('en-CA', { month: 'short' }).toUpperCase()} ${String(d.getDate()).padStart(2, '0')} ${d.getFullYear()}`;
+  `${d.toLocaleDateString('en-CA', { month: 'long' })} ${String(d.getDate()).padStart(2, '0')} ${d.getFullYear()}`;
