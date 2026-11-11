@@ -42,10 +42,25 @@ function PublicScreens({
 }
 
 /** The signed-in app: nav plus the four pages. */
-function MainApp({ userId, defaultSchoolId, onLogOut }: { userId: string; defaultSchoolId: number; onLogOut: () => void }) {
+function MainApp({
+  userId,
+  defaultSchoolId,
+  onLogOut,
+  getAccessTokenSilently,
+}: {
+  userId: string;
+  defaultSchoolId: number;
+  onLogOut: () => void;
+  getAccessTokenSilently?: () => Promise<string | undefined>;
+}) {
   const [page, setPage] = useState<Page>('discover');
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [profileLoaded, setProfileLoaded] = useState(false);
+
+  useEffect(() => {
+    setTokenGetter(getAccessTokenSilently ? () => getAccessTokenSilently() : null);
+    return () => setTokenGetter(null);
+  }, [getAccessTokenSilently]);
 
   useEffect(() => {
     api
@@ -108,10 +123,6 @@ function SampleApp() {
 function LiveApp() {
   const { isLoading, isAuthenticated, user, error, loginWithRedirect, logout, getAccessTokenSilently } = useAuth0();
 
-  useEffect(() => {
-    setTokenGetter(isAuthenticated ? () => getAccessTokenSilently() : null);
-  }, [isAuthenticated, getAccessTokenSilently]);
-
   const logOut = () => logout({ logoutParams: { returnTo: window.location.origin } });
 
   if (isLoading) return <p className="status page">Loading…</p>;
@@ -151,7 +162,14 @@ function LiveApp() {
       />
     );
 
-  return <MainApp userId={user.sub ?? ''} defaultSchoolId={schoolForEmail(user.email)} onLogOut={logOut} />;
+  return (
+    <MainApp
+      userId={user.sub ?? ''}
+      defaultSchoolId={schoolForEmail(user.email)}
+      onLogOut={logOut}
+      getAccessTokenSilently={() => getAccessTokenSilently()}
+    />
+  );
 }
 
 export default function App() {
