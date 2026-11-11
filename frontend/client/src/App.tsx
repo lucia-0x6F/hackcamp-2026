@@ -91,19 +91,22 @@ function MainApp({
       {usingSampleData && <p className="sample-banner">Sample data: nothing is saved to the server.</p>}
       <NavBar current={page} onNavigate={navigate} onLogOut={onLogOut} />
       <main>
-        {page === 'discover' && <Discover schoolId={profile?.schoolId ?? null} refreshKey={dataRevision} />}
-        {page === 'create' && <CreateActivity onCreated={refreshActivityData} onViewDiscover={() => navigate('discover')} />}
-        {page === 'mine' && <MyActivities userId={userId} refreshKey={dataRevision} onDiscover={() => navigate('discover')} />}
-        {page === 'profile' &&
-          (profileLoaded ? (
+        {!profileLoaded ? (
+          <p className="status page">Loading profile…</p>
+        ) : (
+          <>
+            {page === 'discover' && <Discover schoolId={profile?.schoolId ?? null} refreshKey={dataRevision} />}
+            {page === 'create' && <CreateActivity onCreated={refreshActivityData} onViewDiscover={() => navigate('discover')} />}
+            {page === 'mine' && <MyActivities userId={userId} refreshKey={dataRevision} onDiscover={() => navigate('discover')} />}
+            {page === 'profile' && (
             <Profile
               key={profile ? 'saved' : 'new'}
               initial={profile ?? { ...emptyProfile, schoolId: defaultSchoolId }}
               onSaved={saveProfile}
             />
-          ) : (
-            <p className="status page">Loading profile…</p>
-          ))}
+            )}
+          </>
+        )}
       </main>
     </div>
   );
