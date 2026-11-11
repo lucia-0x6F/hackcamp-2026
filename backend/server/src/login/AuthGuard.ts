@@ -3,8 +3,6 @@ import { AuthUser } from './AuthUser.js';
 
 const NS = process.env.AUTH0_CLAIMS_NAMESPACE ?? 'https://oncampus.app';
 
-const isVerified = (value: unknown) => value === true || value === 'true';
-
 export class AuthGuard {
   static async requireAccountEmail(req: Request, res: Response, next: NextFunction): Promise<void> {
     const payload = req.auth?.payload;
@@ -16,11 +14,10 @@ export class AuthGuard {
     try {
       // Auth0 may include email directly or under the configured namespace.
       let email = (payload.email as string | undefined) ?? (payload[`${NS}/email`] as string | undefined);
-      let verified = isVerified(payload.email_verified) || isVerified(payload[`${NS}/email_verified`]);
 
       // Auth0 access tokens commonly omit profile claims. /userinfo requires
       // the access token to have been issued with the `openid email` scopes.
-      if (!email || !verified) {
+      if (!email) {
         const issuer = process.env.AUTH0_ISSUER_BASE_URL?.replace(/\/$/, '');
         const token = req.auth?.token;
         if (issuer && token) {
@@ -28,15 +25,14 @@ export class AuthGuard {
             headers: { Authorization: `Bearer ${token}` },
           });
           if (response.ok) {
-            const profile = await response.json() as { email?: unknown; email_verified?: unknown };
+            const profile = await response.json() as { email?: unknown };
             if (typeof profile.email === 'string') email = profile.email;
-            verified = isVerified(profile.email_verified);
           }
         }
       }
 
-      if (!verified || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        res.status(403).json({ error: 'A verified account email is required' });
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        res.status(403).json({ error: 'An account email is required' });
         return;
       }
       res.locals.user = new AuthUser(payload.sub, email.trim().toLowerCase());

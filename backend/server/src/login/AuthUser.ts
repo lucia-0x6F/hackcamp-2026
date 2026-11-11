@@ -11,7 +11,7 @@ export class AuthUser {
    */
   storageEmail(): string {
     if (!this.email) {
-      throw new Error('A verified account email is required');
+      throw new Error('An account email is required');
     }
     return this.email;
   }
