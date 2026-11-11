@@ -55,6 +55,7 @@ function MainApp({
   const [page, setPage] = useState<Page>('discover');
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [profileLoaded, setProfileLoaded] = useState(false);
+  const [profileError, setProfileError] = useState<string | null>(null);
   const [dataRevision, setDataRevision] = useState(0);
 
   useEffect(() => {
@@ -67,10 +68,14 @@ function MainApp({
       .getProfile()
       .then((p) => {
         setProfile(p);
+        setProfileError(null);
         // First visit after sign-up: step 2 is filling in the profile.
         if (!p) setPage('profile');
       })
-      .catch(() => setProfile(null))
+      .catch((error: Error) => {
+        setProfile(null);
+        setProfileError(error.message);
+      })
       .finally(() => setProfileLoaded(true));
   }, []);
 
@@ -93,6 +98,15 @@ function MainApp({
       <main>
         {!profileLoaded ? (
           <p className="status page">Loading profile…</p>
+        ) : profileError ? (
+          <section className="page">
+            <p className="status status-error" role="alert">
+              Couldn't load your profile: {profileError}
+            </p>
+            <button className="cta" onClick={() => window.location.reload()}>
+              Try again
+            </button>
+          </section>
         ) : (
           <>
             {page === 'discover' && <Discover schoolId={profile?.schoolId ?? null} refreshKey={dataRevision} />}
