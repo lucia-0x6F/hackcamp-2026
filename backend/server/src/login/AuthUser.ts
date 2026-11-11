@@ -10,12 +10,9 @@ export class AuthUser {
    * it, so it must never decide whether a signed-in user may use the app.
    */
   storageEmail(): string {
-    if (this.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
-      return this.email;
+    if (!this.email) {
+      throw new Error('A verified account email is required');
     }
-
-    // The existing SQLite schema requires a unique, non-null email. Keep a
-    // deterministic internal placeholder until an email claim is available.
-    return `auth0-${Buffer.from(this.id).toString('base64url')}@users.oncampus.invalid`;
+    return this.email;
   }
 }

@@ -24,11 +24,11 @@ describe('ProfileService', () => {
     expect(result.email).toBe('alice@gmail.com');
   });
 
-  it('saves a profile when an access token has no email claim', async () => {
+  it('rejects a profile when no verified email was resolved', async () => {
     const users = { find: vi.fn(), exists: vi.fn(), save: vi.fn() } as unknown as UserRepository;
     const schools = { mustFind: vi.fn().mockReturnValue({ id: 1, name: 'UBC', emailDomain: 'student.ubc.ca' }), list: vi.fn() } as unknown as SchoolRepository;
     const service = new ProfileService(users, schools);
-    const result = await service.save(new AuthUser('auth0|user-1', null), profile);
-    expect(result.email).toBe('auth0-yxv0adb8dxnlci0x@users.oncampus.invalid');
+    await expect(service.save(new AuthUser('auth0|user-1', null), profile))
+      .rejects.toThrow('A verified account email is required');
   });
 });
