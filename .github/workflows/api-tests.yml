@@ -13,6 +13,9 @@ jobs:
       - name: Login to Postman CLI
         run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
       - name: Run API tests
+        env:
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
         run: |
           postman collection run "ECEfcEbBeD6Cc45D3cE18740" \
+            --postman-api-key "$POSTMAN_API_KEY" \
             --env-var "BASE_URL=https://hackcamp-2026-v1.vercel.app"
