@@ -16,3 +16,6 @@ export const db = new Database(databasePath);
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 db.exec(readFileSync(new URL('./schema.sql', import.meta.url), 'utf8'));
+try { db.exec('ALTER TABLE users ADD COLUMN pronoun TEXT'); } catch (error) {
+  if (!(error instanceof Error) || !error.message.includes('duplicate column name')) throw error;
+}

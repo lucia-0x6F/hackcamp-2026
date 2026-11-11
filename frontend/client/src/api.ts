@@ -6,6 +6,7 @@ export type ActivityType = (typeof ACTIVITY_TYPES)[number];
 export type Profile = {
   schoolId: number;
   name: string;
+  pronoun?: 'she/her' | 'he/him' | 'they/them' | 'prefer not to say' | null;
   schoolYear: 'first' | 'second' | 'third' | 'fourth' | 'fourth+' | 'graduate';
   major: string | null;
   hobbies: string[];

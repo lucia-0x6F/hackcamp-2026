@@ -18,7 +18,7 @@ const activities: Activity[] = [
 ];
 
 let profile: Profile | null = {
-  schoolId: 1, name: 'Hannah Wells', schoolYear: 'first', major: 'Music',
+  schoolId: 1, name: 'Hannah Wells', pronoun: 'she/her', schoolYear: 'first', major: 'Music',
   hobbies: ['outdoors'], interestedTypes: ['food', 'sports'],
 };
 

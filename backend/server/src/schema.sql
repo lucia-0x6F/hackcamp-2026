@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
   id               TEXT PRIMARY KEY,
   email            TEXT NOT NULL UNIQUE,
   name             TEXT NOT NULL,
+  pronoun          TEXT,
   school_id        INTEGER NOT NULL REFERENCES schools(id),
   school_year      TEXT NOT NULL
     CHECK (school_year IN ('first','second','third','fourth','fourth+','graduate')),

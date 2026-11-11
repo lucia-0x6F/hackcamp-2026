@@ -41,6 +41,7 @@ export function MyActivities({ userId, refreshKey, onDiscover }: { userId: strin
   const [state, setState] = useState<State>({ status: 'loading' });
   const [busy, setBusy] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [confirmCancel, setConfirmCancel] = useState<string | null>(null);
 
   const refresh = useCallback(
     () =>
@@ -182,13 +183,24 @@ export function MyActivities({ userId, refreshKey, onDiscover }: { userId: strin
                       </button>
                     )}
                     {request.status === 'pending' && (
-                      <button
-                        className="pill pill-sm"
-                        disabled={busy === request.id}
-                        onClick={() => act(request.id, () => api.cancelRequest(request.id))}
-                      >
-                        Cancel request
-                      </button>
+                      <>
+                        <button
+                          className="pill pill-sm"
+                          disabled={busy === request.id}
+                          onClick={() => setConfirmCancel(request.id)}
+                        >
+                          Cancel request
+                        </button>
+                        {confirmCancel === request.id && (
+                          <div className="confirm-box" role="dialog" aria-label="Confirm cancellation">
+                            <p>Are you sure that you would like to cancel? We will notify the user who created this activity?</p>
+                            <div className="confirm-actions">
+                              <button className="pill pill-active" onClick={() => { setConfirmCancel(null); void act(request.id, () => api.cancelRequest(request.id)); }}>Yes, cancel the request</button>
+                              <button className="pill" onClick={() => setConfirmCancel(null)}>No, I still want to join</button>
+                            </div>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </article>

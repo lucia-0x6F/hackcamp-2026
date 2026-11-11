@@ -34,6 +34,7 @@ export class NotificationService {
       'Applicant profile:',
       `Name:          ${applicant.name}`,
       `Email:         ${applicant.email}`,
+      `Pronouns:      ${applicant.pronoun ?? 'Not specified'}`,
       `School ID:     ${applicant.schoolId}`,
       `Year:          ${applicant.schoolYear}`,
       `Major:         ${applicant.major ?? 'Not specified'}`,
@@ -74,5 +75,25 @@ export class NotificationService {
     ].join('\n');
 
     await this.notify(applicantEmail, subject, body);
+  }
+
+  async notifyActivityCreatorOfCancellation(
+    creatorEmail: string,
+    activity: ActivityRecord,
+    applicant: User,
+  ): Promise<void> {
+    await this.notify(
+      creatorEmail,
+      `Request cancelled for ${activity.name}`,
+      [
+        `${applicant.name} cancelled their request to join your activity.`,
+        '',
+        `Email:    ${applicant.email}`,
+        `Activity: ${activity.name}`,
+        `Location: ${activity.location}`,
+        '',
+        'Open OnCampus to see the latest requests.',
+      ].join('\n'),
+    );
   }
 }

@@ -8,6 +8,7 @@ type UserRow = {
   email: string;
   school_id: number;
   name: string;
+  pronoun: Profile['pronoun'];
   school_year: Profile['schoolYear'];
   major: string | null;
   hobbies: string;
@@ -33,6 +34,7 @@ export class SqliteUserRepository implements UserRepository {
       {
         schoolId: row.school_id,
         name: row.name,
+        pronoun: row.pronoun,
         schoolYear: row.school_year,
         major: row.major,
         hobbies: JSON.parse(row.hobbies),
@@ -45,11 +47,12 @@ export class SqliteUserRepository implements UserRepository {
   async save(user: User): Promise<void> {
     this.database
       .prepare(
-        `INSERT INTO users (id, email, name, school_id, school_year, major, hobbies, interested_types)
-         VALUES (@id, @email, @name, @schoolId, @schoolYear, @major, @hobbies, @interestedTypes)
+        `INSERT INTO users (id, email, name, pronoun, school_id, school_year, major, hobbies, interested_types)
+         VALUES (@id, @email, @name, @pronoun, @schoolId, @schoolYear, @major, @hobbies, @interestedTypes)
          ON CONFLICT(id) DO UPDATE SET
            email=@email,
            name=@name,
+           pronoun=@pronoun,
            school_id=@schoolId,
            school_year=@schoolYear,
            major=@major,
@@ -60,6 +63,7 @@ export class SqliteUserRepository implements UserRepository {
         id: user.id,
         email: user.email,
         name: user.name,
+        pronoun: user.pronoun,
         schoolId: user.schoolId,
         schoolYear: user.schoolYear,
         major: user.major,

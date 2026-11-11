@@ -9,6 +9,7 @@ type JoinState = { kind: 'idle' } | { kind: 'sending' } | { kind: 'requested' } 
 
 export function ActivityCard({ activity, index }: { activity: Activity; index: number }) {
   const [join, setJoin] = useState<JoinState>({ kind: 'idle' });
+  const [confirming, setConfirming] = useState(false);
   const color = COLORS[index % COLORS.length];
 
   const requestToJoin = async () => {
@@ -42,12 +43,21 @@ export function ActivityCard({ activity, index }: { activity: Activity; index: n
         )}
         <button
           className="card-join"
-          onClick={requestToJoin}
+          onClick={() => setConfirming(true)}
           disabled={join.kind === 'sending' || join.kind === 'requested'}
           aria-label={`${label}: ${activity.name}`}
         >
           {label}
         </button>
+        {confirming && join.kind === 'idle' && (
+          <div className="confirm-box" role="dialog" aria-label="Confirm join request">
+            <p>Are you sure you would like to request to join this activity?</p>
+            <div className="confirm-actions">
+              <button className="pill pill-active" onClick={() => { setConfirming(false); void requestToJoin(); }}>Yes, join</button>
+              <button className="pill" onClick={() => setConfirming(false)}>No, keep browsing</button>
+            </div>
+          </div>
+        )}
       </article>
     </div>
   );

@@ -9,7 +9,7 @@ import { AuthUser } from './login/AuthUser.js';
 import { ProfileService } from './login/ProfileService.js';
 import { SqliteSchoolRepository } from './repositories/SqliteSchoolRepository.js';
 import { SqliteUserRepository } from './repositories/SqliteUserRepository.js';
-import { SCHOOL_YEARS, ACTIVITY_TYPES } from './types.js';
+import { SCHOOL_YEARS, ACTIVITY_TYPES, PRONOUNS } from './types.js';
 import { AppError } from './domain/errors.js';
 import { SqliteActivityRepository } from './repositories/SqliteActivityRepository.js';
 import { SqliteJoinRequestRepository } from './repositories/SqliteJoinRequestRepository.js';
@@ -58,6 +58,7 @@ const recommendations = new RecommendationService(activities, users);
 const profileSchema = z.object({
   schoolId: z.number().int().positive(),
   name: z.string().trim().min(1).max(100),
+  pronoun: z.enum(PRONOUNS).nullable().optional(),
   schoolYear: z.enum(SCHOOL_YEARS),
   major: z.string().max(100).nullable().optional(),
   hobbies: z.array(z.string().trim().min(1).max(50)).max(20),
@@ -98,6 +99,7 @@ const serialize = (user: Awaited<ReturnType<ProfileService['get']>>) =>
     email: user.email,
     schoolId: user.schoolId,
     name: user.name,
+    pronoun: user.pronoun,
     schoolYear: user.schoolYear,
     major: user.major,
     hobbies: user.hobbies,

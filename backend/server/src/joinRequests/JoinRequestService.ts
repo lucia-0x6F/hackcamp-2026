@@ -6,6 +6,7 @@ import type { UserRepository } from '../repositories/UserRepository.js';
 import { AppError } from '../domain/errors.js';
 import type { NotificationService } from '../notifications/NotificationService.js';
 
+
 export class JoinRequestService {
   constructor(
     private readonly requests: JoinRequestRepository,
@@ -99,6 +100,15 @@ export class JoinRequestService {
     const deleted = await this.requests.delete(id, auth.id);
     if (!deleted) {
       throw new AppError('Join request could not be cancelled', 409);
+    }
+
+    const activity = await this.activities.findById(request.activityId);
+    const applicant = await this.users.find(auth.id);
+    const creator = activity ? await this.users.find(activity.creatorId) : null;
+    if (activity && applicant && creator) {
+      await this.sendNotificationSafely(() =>
+        this.notifications.notifyActivityCreatorOfCancellation(creator.email, activity, applicant),
+      );
     }
   }
 

@@ -8,7 +8,7 @@ import type { JoinRequestRecord, JoinRequestRepository, JoinRequestStatus } from
 
 export const supabase = () => createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false, autoRefreshToken: false } });
 const fail = (error: { message: string } | null) => { if (error) throw new Error(`Database error: ${error.message}`); };
-const user = (r: any) => User.create(r.id, { schoolId: r.school_id, name: r.name, schoolYear: r.school_year, major: r.major, hobbies: r.hobbies, interestedTypes: r.interested_types }, r.email);
+const user = (r: any) => User.create(r.id, { schoolId: r.school_id, name: r.name, pronoun: r.pronoun ?? null, schoolYear: r.school_year, major: r.major, hobbies: r.hobbies, interestedTypes: r.interested_types }, r.email);
 const activity = (r: any): ActivityRecord => ({ id:r.id, creatorId:r.creator_id, schoolId:r.school_id, name:r.name, description:r.description, type:r.type, location:r.location, startTime:r.start_time, endTime:r.end_time, link:r.link });
 const request = (r: any): JoinRequestRecord => ({ id:r.id, activityId:r.activity_id, userId:r.user_id, status:r.status, createdAt:r.created_at });
 
@@ -16,7 +16,7 @@ export class SupabaseUserRepository implements UserRepository {
   constructor(private db: SupabaseClient) {}
   async exists(id: string) { const { count, error } = await this.db.from('users').select('*', { count:'exact', head:true }).eq('id', id); fail(error); return Boolean(count); }
   async find(id: string) { const { data, error } = await this.db.from('users').select('*').eq('id', id).maybeSingle(); fail(error); return data ? user(data) : null; }
-  async save(u: User) { const { error } = await this.db.from('users').upsert({ id:u.id, email:u.email, name:u.name, school_id:u.schoolId, school_year:u.schoolYear, major:u.major, hobbies:u.hobbies, interested_types:u.interestedTypes }); fail(error); }
+  async save(u: User) { const { error } = await this.db.from('users').upsert({ id:u.id, email:u.email, name:u.name, pronoun:u.pronoun, school_id:u.schoolId, school_year:u.schoolYear, major:u.major, hobbies:u.hobbies, interested_types:u.interestedTypes }); fail(error); }
 }
 export class SupabaseSchoolRepository implements SchoolRepository {
   constructor(private db: SupabaseClient) {}

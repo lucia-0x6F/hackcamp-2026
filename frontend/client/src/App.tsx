@@ -13,7 +13,7 @@ import { Welcome } from './pages/Welcome';
 import { VerifyEmail } from './pages/VerifyEmail';
 import './App.css';
 
-const emptyProfile: ProfileData = { schoolId: 1, name: '', schoolYear: 'first', major: null, hobbies: [], interestedTypes: [] };
+const emptyProfile: ProfileData = { schoolId: 1, name: '', pronoun: null, schoolYear: 'first', major: null, hobbies: [], interestedTypes: [] };
 
 const schoolForEmail = (email?: string) =>
   SCHOOL_OPTIONS.find((s) => email?.toLowerCase().endsWith(`@${s.domain}`))?.id ?? 1;

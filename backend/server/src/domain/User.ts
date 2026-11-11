@@ -6,6 +6,7 @@ export class User {
     readonly email: string,
     readonly schoolId: number,
     public name: string,
+    public pronoun: Profile['pronoun'],
     public schoolYear: SchoolYear,
     public major: string | null,
     public hobbies: string[],
@@ -22,6 +23,7 @@ export class User {
       email.toLowerCase(),
       input.schoolId,
       name,
+      input.pronoun ?? null,
       input.schoolYear,
       input.major?.trim() || null,
       [...new Set(input.hobbies)], //user input
