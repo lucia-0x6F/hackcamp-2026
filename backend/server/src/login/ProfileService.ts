@@ -1,5 +1,4 @@
 import { AuthUser } from './AuthUser.js';
-import { SchoolEmail } from './SchoolEmail.js';
 import { User } from '../domain/User.js';
 import { AppError } from '../domain/errors.js';
 import type { UserRepository } from '../repositories/UserRepository.js';
@@ -20,11 +19,7 @@ export class ProfileService {
     const isNewUser = !(await this.users.exists(auth.id));
     let school;
     try { school = this.schools.mustFind(input.schoolId); } catch { throw new AppError('School not found', 400); }
-    try {
-      SchoolEmail.of(auth.email ?? '', school.emailDomain);
-    } catch (error) {
-      throw new AppError(error instanceof Error ? error.message : 'School email does not match selected school', 400);
-    }
+    if (!auth.email) throw new AppError('A valid account email is required', 400);
     const user = User.create(auth.id, input, auth.email!);
     await this.users.save(user);
     if (isNewUser && this.notifications) {

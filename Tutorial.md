@@ -57,11 +57,7 @@ The local `backend/server/.env` file is ignored by Git. Commit only `backend/ser
 
 ## Backend authentication
 
-The API uses Auth0-issued RS256 access tokens. Auth0 handles account creation and login; the backend validates the bearer token and only allows addresses from:
-
-- `student.ubc.ca`
-- `sfu.ca`
-- `uvic.ca`
+The API uses Auth0-issued RS256 access tokens. Auth0 handles account creation and login; the backend validates the bearer token and requires a valid account email. The email does not need to be verified or use a school domain.
 
 Configure these backend environment variables before starting the server:
 

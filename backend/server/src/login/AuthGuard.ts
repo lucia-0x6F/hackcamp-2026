@@ -16,7 +16,7 @@ export class AuthGuard {
     const user = new AuthUser(payload.sub, email?.trim().toLowerCase() ?? null);
 
     if (!user.canUseApp()) {
-      res.status(403).json({ error: 'Use a UBC, SFU, or UVic school email' });
+      res.status(403).json({ error: 'A valid account email is required' });
       return;
     }
 

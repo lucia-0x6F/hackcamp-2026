@@ -8,9 +8,9 @@ const NOTES = [
 ];
 
 /**
- * Step 1 of sign-up: pick your school and enter your school email.
+ * Step 1 of sign-up: pick a school and enter an email address.
  * We never ask for a password here. Auth0 handles login and email
- * verification. The backend checks that the email uses an allowed school domain.
+ * verification. Any valid email address is accepted.
  * Continue hands over to Auth0's sign-up page (prefilled with this email),
  * which sends the verify-your-email message. In sample mode it goes straight
  * to profile setup.
@@ -29,14 +29,11 @@ export function SignUp({
   const [touched, setTouched] = useState(false);
 
   const school = SCHOOL_OPTIONS.find((s) => s.id === schoolId);
-  const domain = email.trim().toLowerCase().split('@')[1];
   const error = !school
     ? 'Pick your school first.'
     : !/^[^\s@]+@[^\s@]+$/.test(email.trim())
-      ? 'Enter your school email.'
-      : domain !== school.domain
-        ? `Use your @${school.domain} email.`
-        : null;
+      ? 'Enter a valid email address.'
+      : null;
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -78,7 +75,7 @@ export function SignUp({
           </div>
         </fieldset>
         <label>
-          School email
+          Email
           <input
             type="email"
             autoComplete="email"
@@ -86,13 +83,13 @@ export function SignUp({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onBlur={() => setTouched(true)}
-            placeholder={school ? `you@${school.domain}` : 'you@student.ubc.ca'}
+            placeholder="you@example.com"
             aria-invalid={touched && !!error}
             aria-describedby="signup-help"
           />
         </label>
         <p id="signup-help" className={touched && error ? 'field-error' : 'field-help'} role={touched && error ? 'alert' : undefined}>
-          {touched && error ? error : "We'll send a link to verify it's really you."}
+          {touched && error ? error : "Enter the email address associated with your account."}
         </p>
         <button className="cta">
           Continue <span className="cta-arrow" aria-hidden="true">→</span>

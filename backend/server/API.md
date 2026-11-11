@@ -22,15 +22,7 @@ Protected endpoints require an Auth0 access token:
 Authorization: Bearer <access_token>
 ```
 
-The token must be valid, verified, and associated with an allowed school email address.
-
-Allowed email domains are currently:
-
-```text
-student.ubc.ca
-sfu.ca
-uvic.ca
-```
+The access token must be valid and include a valid account email. Email verification and school-domain restrictions are not enforced by the API.
 
 ## Common response format
 

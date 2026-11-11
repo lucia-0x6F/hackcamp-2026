@@ -16,10 +16,11 @@ describe('ProfileService', () => {
     expect(users.save).toHaveBeenCalled();
   });
 
-  it('rejects a profile when the email does not match the school', async () => {
+  it('allows a profile when the email domain differs from the selected school', async () => {
     const users = { find: vi.fn(), exists: vi.fn(), save: vi.fn() } as unknown as UserRepository;
     const schools = { mustFind: vi.fn().mockReturnValue({ id: 1, name: 'UBC', emailDomain: 'student.ubc.ca' }), list: vi.fn() } as unknown as SchoolRepository;
     const service = new ProfileService(users, schools);
-    await expect(service.save(new AuthUser('user-1', 'alice@sfu.ca'), profile)).rejects.toMatchObject({ status: 400 });
+    const result = await service.save(new AuthUser('user-1', 'alice@gmail.com'), profile);
+    expect(result.email).toBe('alice@gmail.com');
   });
 });
