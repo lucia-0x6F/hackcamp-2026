@@ -7,7 +7,15 @@ import type { ActivityFilters, ActivityRecord, ActivityRepository } from './Acti
 import type { JoinRequestRecord, JoinRequestRepository, JoinRequestStatus } from './JoinRequestRepository.js';
 
 export const supabase = () => createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false, autoRefreshToken: false } });
-const fail = (error: { message: string } | null) => { if (error) throw new Error(`Database error: ${error.message}`); };
+const fail = (error: { message: string; code?: string } | null) => {
+  if (error) {
+    // Keep the Postgres/Supabase error code available to the HTTP error
+    // handler. In particular, 23505 is a unique-constraint violation.
+    const databaseError = new Error(`Database error: ${error.message}`) as Error & { code?: string };
+    databaseError.code = error.code;
+    throw databaseError;
+  }
+};
 const user = (r: any) => User.create(r.id, { schoolId: r.school_id, name: r.name, pronoun: r.pronoun ?? null, schoolYear: r.school_year, major: r.major, hobbies: r.hobbies, interestedTypes: r.interested_types }, r.email);
 const activity = (r: any): ActivityRecord => ({ id:r.id, creatorId:r.creator_id, schoolId:r.school_id, name:r.name, description:r.description, type:r.type, location:r.location, startTime:r.start_time, endTime:r.end_time, link:r.link });
 const request = (r: any): JoinRequestRecord => ({ id:r.id, activityId:r.activity_id, userId:r.user_id, status:r.status, createdAt:r.created_at });

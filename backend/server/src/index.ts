@@ -167,7 +167,11 @@ const errors: ErrorRequestHandler = (error, _req, res, _next) => {
   // A user can change Auth0 accounts while keeping the same email.
   // SQLite rejects that duplicate email, so return a useful client error
   // instead of hiding it behind a generic 500 response.
-  if (error instanceof Error && error.message.includes('UNIQUE constraint failed: users.email')) {
+  if (
+    error instanceof Error &&
+    (error.message.includes('UNIQUE constraint failed: users.email') ||
+      (error as Error & { code?: string }).code === '23505' && error.message.includes('users_email_key')))
+  {
     res.status(409).json({ error: 'A profile already exists for this email address' });
     return;
   }
