@@ -14,7 +14,7 @@ class HomePageTest {
     @BeforeEach
     void openBrowser() {
         driver = new ChromeDriver();
-        driver.get(System.getProperty("baseUrl", "http://localhost:5173"));
+        driver.get(System.getProperty("baseUrl", "http://localhost:5173")); //local frontend url must be the same
     }
 
     @AfterEach
@@ -25,7 +25,7 @@ class HomePageTest {
     }
 
     @Test
-    void welcomePageLoadsWithoutAuth0Login() {
+    void welcomePageLoadsWithoutAuth0Login() { //th title is right and contains sigh up nad log in
         assertTrue(driver.findElement(By.tagName("h1")).getText().contains("on campus"));
         assertTrue(driver.getPageSource().contains("Sign up with email"));
         assertTrue(driver.getPageSource().contains("Log in"));
